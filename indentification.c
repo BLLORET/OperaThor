@@ -1,12 +1,14 @@
-# include "identification.h"
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <err.h>
+# include <string.h>
+# include <fcntl.h>
 
-
-struct coeff *initcoeff(int degree) {
-  struct coeff *cf = malloc(sizeof(struct coeff) * (degree + 1));
-  coeff ->next = NULL;
-  coeff->value = 0;
-  coeff->degree = degree;
-}
+struct coeff {
+  int left[5];
+  int right[5];
+};
 
 int CharToInt(char *str) {
   int n = 0;
@@ -19,74 +21,83 @@ int CharToInt(char *str) {
   return n;
 }
 
-int identification(char *str, struct coeff *cf) {
-  size_t len = strlen(str);
-  char *nb = calloc(4, sizeof(char));
-  int j = 0;
-  int signe = 1;
-  for(size_t i = 0; i < len; i++) {
-  	switch (NumOrChar(str[i])) {
-  	  case 0:
-        nb[j] = str[i];
-        j++;
-  	    break;
-  	  case 1:
-        if (!nb)
-          cf->value = 1;
-        else
-          cf->value = CharToInt(*nb) * signe;
-  	    break;
-  	  case 2:
+int[] FillZero() {
+  int coeff[5];
+  for (int i = 0, i < 5, i++)
+    coeff[i] = 0;
+  return coeff;
+}
 
-  	    break;
-  	  case 3:
-        signe = 1;
-  	    break;
-  	  case 4:
-  	    signe = -1;
-  	    break;
-  	  case 5:
-        i++;
-  	    break;
-  	  case 6:
-
-  	    break;
-  	  default:
-        errx(1, "Invalid expression");
-  	    break;
-  	}
-
+int FindNumber(char *str, char *nb) {
+  int i = 0;
+  while (*str >= '0' && *str <= '9') {
+    nb[i] = *str;
+    i++;
+    str++;
   }
-  free(nb);
+  return i;
 }
 
-// type -1 is an error
-// 0 is a number
-// 1 is a letter
-// 2 is a degre
-// 3 is + 
-// 4 is -
-// 5 is *
-// 6 is /
-int NumOrChar(char *str) {
-  if (*str >= '0' && *str <= '9')
-    return 0;
-  if (*str == 'X')
-  	return 1;
-  if (*str == '^')
-  	return 2;
-  if (*str == '+')
-  	return 3;
-  if (*str == '-')
-  	return 4;
-  if (*str == '*')
-    return 5;
-  if (*str == '/')
-  	return 6;
-  return -1;
+struct coeff PutExpression(char *str) {
+  struct coeff cf;
+  cf.left = FillZero();
+  cf.right = FillZero();
+  
+  int l = 1;
+
+  char *nb = calloc(42, sizeof(char));
+  int signe = 1;
+  if (*str == '-') {
+    signe = -1;
+    str++;
+  } else if (*str == '+') str++;
+
+  while(*str) {
+    str += FindNumber(str, nb);
+    free(nb);
+    nb = calloc(42, sizeof(char));
+    str += 2;
+    if (l) cf.left[*str] = atoi(nb) * signe;
+    else cf.right[*str] = atoi(nb) * signe;
+    str++;
+    if (*str == '+') {
+      signe = 1;
+      str++;
+    }
+    else if (*str == '-') {
+      signe = -1;
+      str++;
+    }
+    else if (*str == '=') {
+      l = 0;
+      str++;
+      if (*str == '-') {
+        signe = -1;
+        str++;
+      } else if (*str == '+') {
+        signe = 1;
+        str++;
+      }
+    }
+  }
+  return coeffs;
 }
 
-int main(int argc, char const *argv[]) {
-  	
+
+static void print(struct coeff cf) {
+  printf('[ ');
+  for (int i = 0; i < 5; ++i)
+    printf("%d; ", cf.left[i]);
+  printf("]\n");
+  for (int i = 0; i < 5; ++i)
+    printf("%d; ", cf.right[i]);
+}
+int main(/*int argc, char *argv[]*/) {
+  /*if (argc < 2) errx(1 ,"Missing arguments");
+  if (argc > 2) errx(1 ,"Too much arguments");*/
+
+  int cf[] = PutExpression(/*argv[1]*/ "4X^3+5X^1=0");
+  print(cf);
+
   return 0;
 }

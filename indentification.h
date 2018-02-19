@@ -12,7 +12,11 @@ struct coeff {
   int degree;
 };
 
-struct coeff *initcoeff(int degree);
+struct coeff *initcoeff();
 
-int degree(char *str);
+int CharToInt(char *str);
+
+void identification(char *str, struct coeff *cf);
+
+int NumOrChar(char *str);
 
