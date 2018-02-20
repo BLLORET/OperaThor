@@ -171,6 +171,7 @@ void Print_premier_degre(int a, int b, int c)
 			}
 			else
 			{
+				d = Valeur_absolu_int(c);
 				printf("			=> %d * x + %d = 0\n",a,d);
 				printf("On obtient donc ceci : \n");
 				printf("2. On isole le x d un cote de l equation :\n");
@@ -246,7 +247,7 @@ void Print_premier_degre(int a, int b, int c)
 			printf("2. On isole le x d un cote de l equation :\n");
 			printf("			=> %d * x = %d\n",a,c);
 			printf("			=>  x = %d / %d\n",c,a);
-			sol = (float)(c/a);
+			sol = ( (float)c/ (float)a);
 			printf("3. Le resultat de cette equation est donc :\n");
 			printf("			=>  x = %.2f\n",sol);
 		}
