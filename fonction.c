@@ -46,8 +46,16 @@ float solutionS(int b, int a)
 	float x= (float)(-b/(2*a));
 	return x;
 }
-// Valeur absolu des solutions
+// Valeur absolu des solutions en float
 float Valeur_absolu(float nombre)
+{
+	if(nombre <0)
+		return -nombre;
+	else
+		return nombre;
+}
+//Valeur absolu de int
+int Valeur_absolu_int(int nombre)
 {
 	if(nombre <0)
 		return -nombre;
@@ -67,11 +75,199 @@ float canonique_delta(int a, int Delta)
 	return c; 
 }
 
+//Transforme un char en int
+int char_to_int(char c)
+{
+	int n;
+	if(c== '0') n=0;
+	else n = c - '0'; 
+	return n;
+}
+//Affochage equations premier degré
 void Print_premier_degre(int a, int b, int c)
 {
-	
+	int d,f,res,vres;
+	float sol;
+	printf("1. On passe tout d'un même côté en faisaint attention ");
+	printf("aux signes. Si on a deja  = 0 alors cela ne changera rien\n");
+	if(c ==0)
+	{
+			if(b > 0)
+			{
+				printf("			=> %d * x + %d = 0\n",a,b);
+				printf("2. On isole le x d un cote de l equation :\n");
+				printf("			=> %d * x = -%d\n",a,b);
+				printf("			=>  x = -%d / %d\n",b,a);
+				sol = (float)(b/a);
+				printf("3. Le resultat de cette equation est donc :\n");
+				printf("			=>  x = -%.2f\n",sol);
+			}
+			else
+			{
+				f = Valeur_absolu_int(b);
+				printf("			=> %d * x - %d = 0\n",a,f);
+				printf("2. On isole le x d un cote de l equation :\n");
+				printf("			=> %d * x = %d\n",a,b);
+				printf("			=>  x = %d / %d\n",b,a);
+				sol = (float)(b/a);
+				printf("3. Le resultat de cette equation est donc :\n");
+				printf("			=>  x = %.2f\n",sol);
+			}
+		
+	}
+	else if(c < 0)
+	{
+		if(b > 0) // c > 0 et b> 0 => res >0
+			{
+				d = Valeur_absolu_int(c);
+				printf("			=> %d * x + %d + %d = 0\n",a,b,d);
+				printf("On obtient donc ceci : \n");
+				res = b+d;
+				printf("			=> %d * x + %d = 0\n",a,res);
+				printf("2. On isole le x d un cote de l equation :\n");
+				printf("			=> %d * x = -%d\n",a,res);
+				printf("			=>  x = -%d / %d\n",res,a);
+				sol = (float)(res/a);
+				printf("3. Le resultat de cette equation est donc :\n");
+				printf("			=>  x = -%.2f\n",sol);
+				
+			}
+		else
+		{
+				d = Valeur_absolu_int(c);
+				f = Valeur_absolu_int(b);
+				printf("			=> %d * x - %d + %d = 0\n",a,f,d);
+				printf("On obtient donc ceci : \n");
+				res = b+d;
+				if(res < 0)
+				{ 
+					vres = Valeur_absolu_int(res);
+					printf("			=> %d * x - %d = 0\n",a,vres);
+					printf("2. On isole le x d un cote de l equation :\n");
+					printf("			=> %d * x = %d\n",a,vres);
+					printf("			=>  x = %d / %d\n",vres,a);
+					sol = (float)(vres/a);
+					printf("3. Le resultat de cette equation est donc :\n");
+					printf("			=>  x = %.2f\n",sol);
+				}
+				else if(res == 0)
+				{
+					printf("			=> %d * x = 0\n",a);
+					printf("2. On isole le x d un cote de l equation :\n");
+					printf("			=> x = 0 /%d\n",a);
+					printf("3. Le resultat de cette equation est donc :\n");
+					printf("			=> x = 0\n");
+				}
+				else
+				{
+					printf("			=> %d * x + %d = 0\n",a,res);
+					printf("2. On isole le x d un cote de l equation :\n");
+					printf("			=> %d * x = -%d\n",a,res);
+					printf("			=>  x = -%d / %d\n",res,a);
+					sol = (float)(res/a);
+					printf("3. Le resultat de cette equation est donc :\n");
+					printf("			=>  x = -%.2f\n",sol);
+				}
+			}
+		
+	}
+	else // c > 0
+	{
+		if(b > 0)
+			{
+				printf("			=> %d * x + %d - %d = 0\n",a,b,c);
+				printf("On obtient donc ceci : \n");
+				res = b-c;
+				if(res < 0)
+				{
+					vres = Valeur_absolu_int(res);
+					printf("			=> %d * x - %d = 0\n",a,vres);
+					printf("2. On isole le x d un cote de l equation :\n");
+					printf("			=> %d * x = %d\n",a,vres);
+					printf("			=>  x = %d / %d\n",vres,a);
+					sol = (float)(vres/a);
+					printf("3. Le resultat de cette equation est donc :\n");
+					printf("			=>  x = %.2f\n",sol);
+				}
+				else if(res == 0)
+				{
+					printf("			=> %d * x = 0\n",a);
+					printf("2. On isole le x d un cote de l equation :\n");
+					printf("			=> x = 0 /%d\n",a);
+					printf("3. Le resultat de cette equation est donc :\n");
+					printf("			=> x = 0\n");
+				}
+				else
+				{
+					printf("			=> %d * x + %d = 0\n",a,res);
+					printf("2. On isole le x d un cote de l equation :\n");
+					printf("			=> %d * x = -%d\n",a,res);
+					printf("			=>  x = -%d / %d\n",res,a);
+					sol = (float)(res/a);
+					printf("3. Le resultat de cette equation est donc :\n");
+					printf("			=>  x = -%.2f\n",sol);
+				}
+				
+			}
+		else // c<0 et b< 0 => res < 0
+		{
+				f = Valeur_absolu_int(b);
+				printf("			=> %d * x - %d - %d = 0\n",a,f,c);
+				printf("On obtient donc ceci : \n");
+				res = b-c;
+				printf("%d",res);
+				if(res < 0)
+				{ 
+					vres = Valeur_absolu_int(res);
+					printf("			=> %d * x - %d = 0\n",a,vres);
+				}
+				/*else if(res ==0)
+				{
+					printf("			=> %d * x = 0\n",a);
+				}
+				else
+				{
+					printf("			=> %d * x + %d = 0\n",a,res);
+				}*/
+		}
+}
 }
 
+//Récupère l'équation à gauche du =
+char* gauche(char* data, char* recup)
+{
+	int i=0;
+	while( data[i] != '=')
+	{
+		*recup= data[i];
+		recup ++;
+		i++;
+	}
+	return recup;
+}
+//Récupère le int à droite du =
+int droit(char* data)
+{
+	int i=0;
+	while( data[i] != '=')
+	{
+		i++;
+	}
+	int d = char_to_int(data[i+1]);
+	return d;
+}
+int* recup_chiffres(char* data, int* recup)
+{
+	for(size_t i=0; i< strlen(data);i++)
+	{
+		if(data[i] >= '0' && data[i] <= '9')
+		{
+			*(recup)= char_to_int(data[i]);
+			recup++;
+		}
+	}
+	return recup;
+}	
 //Affichage de la forme canonique
 void Print_canonique(int a, int b, int Delta)
 {
@@ -129,7 +325,6 @@ void Print_canonique(int a, int b, int Delta)
 	}
 	
 }
-
 
 //Affichage des equations du second degré
 void Print_Second_degre(int a, int b, int c)
@@ -330,36 +525,8 @@ void Print_Second_degre(int a, int b, int c)
 			printf(" l ensemble des complexes\n");}
 			/**************************************************************/
 		Print_canonique(a,b, Delta);
-	}
-
-
-int char_to_int(char c)
-{
-	int n = c - '0'; 
-	return n;
 }
-
-void Print(int* str)
-{
-	while(*str)
-	{
-		printf("%d\n",*str);
-		str++;
-	}
-}
-
-int* recup_chiffres(char* data, int* recup)
-{
-	for(int i=0; i< strlen(data);i++)
-	{
-		if(data[i] >= '0' && data[i] <= '9')
-		{
-			*(recup)= char_to_int(data[i]);
-			recup++;
-		}
-	}
-	return recup;
-}	
+void Print_Troisieme_degre(int a, int b, int c, int d);
 int main(int argc, char **argv)
 {
 	//Verification des parametres
@@ -370,7 +537,8 @@ int main(int argc, char **argv)
 	int a= atoi(argv[2]);
 	int b= atoi(argv[3]);
 	int c= atoi(argv[4]);
-	int chiffres[3]={};
+	char chiffres[14]={};
+	int numbers[12]={};
 	//INDICATION
 	printf("INDICATION:\n");
 	printf("						=> On ne cherchera les solutions de l equation");
@@ -383,13 +551,14 @@ int main(int argc, char **argv)
 	printf("\n");
   printf("On cherche a resoudre l equation suivante: %s \n",argv[1]);
 	printf("C est une equation de degre: %d \n",degre);
-	printf("\n");
 	if(degre== 2)
 	{/**************************************************************/
+		printf("On a :\n");
+		printf("		f(x) = %s\n",argv[1]);
 		Print_Second_degre(a,b,c);
 	}                                           
 	/**************************************************************/	
-	if(degre >3)
+	if(degre >4)
 	{
 		printf("Desole ce solveur ne prends pas les equations de degre superieur");
 		printf(" a 3. Merci de votre comprehension\n");
@@ -397,6 +566,13 @@ int main(int argc, char **argv)
 	}
 	if(degre == 1)
 	{
-		Print_Premier_degre(a,b,c);
+			printf("Pour résoudre une equation de degre 1 voici les etapes:\n");
+			printf("On a :\n");
+			printf("		f(x) = %s\n",argv[1]);
+			
+			gauche(argv[1],chiffres);
+			recup_chiffres(chiffres,numbers);
+			int d = droit(argv[1]);
+			Print_premier_degre(a,b,d);
 	}
 }
