@@ -1,21 +1,20 @@
 #Makefile
 CC=gcc
 CPPFLAGS= -MMD
-CFLAGS= -Wall -Wextra -std=c99 -O2
+CFLAGS= -Wall -Wextra -std=c99 -O2 -g
 LDFLAGS=
 LDLIBS=
+
+OBJ= identification.o fonction.o operathor.o
+DEP= ${OBJ:.o=.d}
+
+all: operathor
  
-SRC= fonction.c
-DEP= ${SRC:.c=.d}
-PRG= ${SRC:.c=}
- 
-all: ${PRG}
- 
--include ${DEP}
+operathor: ${OBJ}
  
 clean:
-	rm -f *.o
-	rm -f ${DEP}
-	rm -f ${PRG}
+		${RM} ${OBJ} ${DEP} *~
+		${RM} operathor
  
+-include ${DEP}
 # END Makefile
