@@ -1,3 +1,9 @@
 Welcome to OperaThor Project
 
-This Project has to goal to resolve some equations and is made by Baptiste Lloret, Oceane Merlo and Sebastien Barbier.
+This Project has to goal to resolve some equations and is 
+made\n by Baptiste Lloret, Oceane Merlo and Sebastien Barbier.
+
+To build the project, you just need to write "make" at the same way that the project on your
+terminal.
+
+After that, run the program with "./operathor" and an equation to resolve.
