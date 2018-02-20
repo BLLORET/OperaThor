@@ -6,26 +6,15 @@
 # include <fcntl.h>
 
 struct coeff {
-  int left[5];
-  int right[5];
+  int *left;
+  int *right;
 };
 
-int CharToInt(char *str) {
-  int n = 0;
-  int d = 1;
-  while (*str) {
-    n = n * d + (*str - '0');
-    d *= 10;
-    str++;
-  }
-  return n;
-}
-
-int[] FillZero() {
-  int coeff[5];
-  for (int i = 0, i < 5, i++)
-    coeff[i] = 0;
-  return coeff;
+int FindDegree(int *tab) {
+  int degree = 4;
+  while(tab[degree] != 0)
+    degree--;
+  return degree;
 }
 
 int FindNumber(char *str, char *nb) {
@@ -38,10 +27,10 @@ int FindNumber(char *str, char *nb) {
   return i;
 }
 
-struct coeff PutExpression(char *str) {
-  struct coeff cf;
-  cf.left = FillZero();
-  cf.right = FillZero();
+struct coeff *PutExpression(char *str) {
+  struct coeff *cf = malloc(sizeof(struct coeff));
+  cf->left = calloc(5, sizeof(int));
+  cf->right = calloc(5, sizeof(int));
   
   int l = 1;
 
@@ -54,11 +43,12 @@ struct coeff PutExpression(char *str) {
 
   while(*str) {
     str += FindNumber(str, nb);
+    if (!l && !*str) break;
+    str += 2;
+    if (l) cf->left[*str - '0'] = atoi(nb) * signe;
+    else cf->right[*str - '0'] = atoi(nb) * signe;
     free(nb);
     nb = calloc(42, sizeof(char));
-    str += 2;
-    if (l) cf.left[*str] = atoi(nb) * signe;
-    else cf.right[*str] = atoi(nb) * signe;
     str++;
     if (*str == '+') {
       signe = 1;
@@ -71,33 +61,35 @@ struct coeff PutExpression(char *str) {
     else if (*str == '=') {
       l = 0;
       str++;
+      signe = 1;
       if (*str == '-') {
         signe = -1;
         str++;
-      } else if (*str == '+') {
-        signe = 1;
-        str++;
-      }
+      } else if (*str == '+') str++;
     }
   }
-  return coeffs;
+  return cf;
 }
 
 
-static void print(struct coeff cf) {
-  printf('[ ');
+static void print(struct coeff *cf) {
+  printf("[ ");
   for (int i = 0; i < 5; ++i)
-    printf("%d; ", cf.left[i]);
+    printf("%d; ", cf->left[i]);
+  printf("]\n[ ");
+  for (int i = 0; i < 5; ++i)
+    printf("%d; ", cf->right[i]);
   printf("]\n");
-  for (int i = 0; i < 5; ++i)
-    printf("%d; ", cf.right[i]);
 }
-int main(/*int argc, char *argv[]*/) {
-  /*if (argc < 2) errx(1 ,"Missing arguments");
-  if (argc > 2) errx(1 ,"Too much arguments");*/
-
-  int cf[] = PutExpression(/*argv[1]*/ "4X^3+5X^1=0");
+int main(int argc, char *argv[]) {
+  if (argc < 2) errx(1 ,"Missing arguments");
+  if (argc > 2) errx(1 ,"Too much arguments");
+  
+  struct coeff *cf = PutExpression(argv[1] /*"-4X^2-2X^1+3X^0=3X^2+2X^1-2X^0"*/);
   print(cf);
+  free(cf->right);
+  free(cf->left);
+  free(cf);
 
   return 0;
 }
