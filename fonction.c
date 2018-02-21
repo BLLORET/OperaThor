@@ -3,14 +3,14 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-
+#include "fonction.h"
 // Calcul du Delta
-int delta(int a, int b, int c)
+static int delta(int a, int b, int c)
 {
 	return ((b*b) - (4*a*c));
 }
 //Racine carré arrondis à l'entier près
-int int_sqrt(int n) 
+static int int_sqrt(int n) 
 {
 	int i=4, k=0,x=0,y=n;
 	
@@ -30,7 +30,7 @@ int int_sqrt(int n)
 	}
 }
 //Solution Delta >0
-float* solutionP(int delta,int a, int b,float* solutions)
+static float* solutionP(int delta,int a, int b,float* solutions)
 {
 	double nb= delta;
 
@@ -41,13 +41,13 @@ float* solutionP(int delta,int a, int b,float* solutions)
 	return solutions;
 }
 // Solution Delta == 0
-float solutionS(int b, int a)
+static float solutionS(int b, int a)
 {
 	float x= (float)(-b/(2*a));
 	return x;
 }
 // Valeur absolu des solutions en float
-float Valeur_absolu(float nombre)
+static float Valeur_absolu(float nombre)
 {
 	if(nombre <0)
 		return -nombre;
@@ -55,7 +55,7 @@ float Valeur_absolu(float nombre)
 		return nombre;
 }
 //Valeur absolu de int
-int Valeur_absolu_int(int nombre)
+static int Valeur_absolu_int(int nombre)
 {
 	if(nombre <0)
 		return -nombre;
@@ -64,7 +64,7 @@ int Valeur_absolu_int(int nombre)
 }
 
 //Forme canonique
-float canonique_carre(int a, int b)
+static float canonique_carre(int a, int b)
 {
 	float c = (float)(b/(float)(2*a));
 	return c;
@@ -269,7 +269,7 @@ int* recup_chiffres(char* data, int* recup)
 	return recup;
 }	
 //Affichage de la forme canonique
-void Print_canonique(int a, int b, int Delta)
+static void Print_canonique(int a, int b, int Delta)
 {
 	printf("5. Nous pouvons aussi obtenir la forme canonique de ce trinome\n");
 	printf("\n");
@@ -526,7 +526,6 @@ void Print_Second_degre(int a, int b, int c)
 			/**************************************************************/
 		Print_canonique(a,b, Delta);
 }
-void Print_Troisieme_degre(int a, int b, int c, int d);
 int main(int argc, char **argv)
 {
 	//Verification des parametres
