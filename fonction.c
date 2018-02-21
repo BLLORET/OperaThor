@@ -132,7 +132,7 @@ void Print_premier_degre(int a, int b, int c)
 				printf("			=>  x = -%.2f\n",sol);
 				
 			}
-		else
+		else if(b < 0)
 		{
 				d = Valeur_absolu_int(c);
 				f = Valeur_absolu_int(b);
@@ -168,6 +168,17 @@ void Print_premier_degre(int a, int b, int c)
 					printf("3. Le resultat de cette equation est donc :\n");
 					printf("			=>  x = -%.2f\n",sol);
 				}
+			}
+			else
+			{
+				printf("			=> %d * x + %d = 0\n",a,d);
+				printf("On obtient donc ceci : \n");
+				printf("2. On isole le x d un cote de l equation :\n");
+				printf("			=> %d * x = -%d\n",a,d);
+				printf("			=>  x = -%d / %d\n",d,a);
+				sol = (float)(d/a);
+				printf("3. Le resultat de cette equation est donc :\n");
+				printf("			=>  x = -%.2f\n",sol);
 			}
 		
 	}
@@ -209,26 +220,35 @@ void Print_premier_degre(int a, int b, int c)
 				}
 				
 			}
-		else // c<0 et b< 0 => res < 0
+		else if(b < 0) // c<0 et b< 0 => res < 0
 		{
 				f = Valeur_absolu_int(b);
 				printf("			=> %d * x - %d - %d = 0\n",a,f,c);
 				printf("On obtient donc ceci : \n");
 				res = b-c;
 				printf("%d",res);
-				if(res < 0)
-				{ 
-					vres = Valeur_absolu_int(res);
-					printf("			=> %d * x - %d = 0\n",a,vres);
-				}
-				/*else if(res ==0)
-				{
-					printf("			=> %d * x = 0\n",a);
-				}
-				else
-				{
-					printf("			=> %d * x + %d = 0\n",a,res);
-				}*/
+				//if(res < 0)
+				//{ 
+				vres = Valeur_absolu_int(res);
+				printf("			=> %d * x - %d = 0\n",a,vres);
+				printf("2. On isole le x d un cote de l equation :\n");
+				printf("			=> %d * x = %d\n",a,vres);
+				printf("			=>  x = %d / %d\n",vres,a);
+				sol = (float)(vres/a);
+				printf("3. Le resultat de cette equation est donc :\n");
+				printf("			=>  x = %.2f\n",sol);
+				
+		}
+		else
+		{
+			printf("			=> %d * x - %d = 0\n",a,c);
+			printf("On obtient donc ceci : \n");
+			printf("2. On isole le x d un cote de l equation :\n");
+			printf("			=> %d * x = %d\n",a,c);
+			printf("			=>  x = %d / %d\n",c,a);
+			sol = (float)(c/a);
+			printf("3. Le resultat de cette equation est donc :\n");
+			printf("			=>  x = %.2f\n",sol);
 		}
 }
 }
@@ -399,22 +419,22 @@ void Print_Second_degre(int a, int b, int c)
 				{
 					if(solP[0]<0 && solP[1]>0)
 					{
-						printf(" f(x) = %d * x * ( x + %.2f)",a,x1);
+						printf(" f(x) = %d * ( x + %.2f)\n",a,x1);
 						printf(" * ( x - %.2f)\n",x2);
 					}
 					else if(solP[0]>0 && solP[1]<0)
 					{
-						printf(" f(x) = %d * x * ( x - %.2f)",a,x1);
+						printf(" f(x) = %d * ( x - %.2f)\n",a,x1);
 						printf(" * ( x + %.2f)\n",x2);
 					}
 					else if(solP[0] > 0 && solP[1]>0)
 					{
-						printf(" f(x) = %d * x * ( x - %.2f)",a,x1);
+						printf(" f(x) = %d * ( x - %.2f)\n",a,x1);
 						printf(" * ( x - %.2f)\n",x2);
 					}
 					else
 					{
-						printf(" f(x) = %d * x * ( x + %.2f)",a,x1);
+						printf(" f(x) = %d * ( x + %.2f)\n",a,x1);
 						printf(" * ( x + %.2f)\n",x2);
 					}
 				}
