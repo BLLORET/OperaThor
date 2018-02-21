@@ -1,18 +1,8 @@
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <err.h>
-# include <string.h>
-# include <fcntl.h>
-
-struct coeff {
-  int *left;
-  int *right;
-};
+# include "identification.h"
 
 int FindDegree(int *tab) {
   int degree = 4;
-  while(tab[degree] != 0)
+  while(tab[degree] == 0)
     degree--;
   return degree;
 }
@@ -71,25 +61,18 @@ struct coeff *PutExpression(char *str) {
   return cf;
 }
 
-
-static void print(struct coeff *cf) {
-  printf("[ ");
-  for (int i = 0; i < 5; ++i)
-    printf("%d; ", cf->left[i]);
-  printf("]\n[ ");
-  for (int i = 0; i < 5; ++i)
-    printf("%d; ", cf->right[i]);
-  printf("]\n");
-}
-int main(int argc, char *argv[]) {
-  if (argc < 2) errx(1 ,"Missing arguments");
-  if (argc > 2) errx(1 ,"Too much arguments");
-  
-  struct coeff *cf = PutExpression(argv[1] /*"-4X^2-2X^1+3X^0=3X^2+2X^1-2X^0"*/);
-  print(cf);
+void FreeCoeff(struct coeff*cf) {
   free(cf->right);
   free(cf->left);
   free(cf);
+}
 
-  return 0;
+void printcoeff(struct coeff *cf) {
+  printf("cf->left = [ ");
+  for (int i = 0; i < 5; ++i)
+    printf("%d ", cf->left[i]);
+  printf("]\ncf->right = [ ");
+  for (int i = 0; i < 5; ++i)
+    printf("%d ", cf->right[i]);
+  printf("]\n");
 }
