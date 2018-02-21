@@ -258,7 +258,11 @@ void Print_Matrix(char* fonction)
 int main(int argc, char** argv)
 {
 	if(argc < 2){
-		printf("mode de calcul svp\n");
+		printf("Opérations svp\n");
+		printf("			=> addition \n");
+		printf("			=> soustraction \n");
+		printf("			=> transposer\n");
+		printf("			=> multiplication\n");
 		return 0;
 	}
 	printf("Voici quelques exemples d application de l addition,");
