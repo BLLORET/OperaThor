@@ -1,11 +1,11 @@
 #Makefile
 CC=gcc
 CPPFLAGS= -MMD
-CFLAGS= -Wall -Wextra -std=c99 -O2 -g
+CFLAGS= -Wall  -Wextra -std=c99 -O2 -g
 LDFLAGS=
-LDLIBS=
+LDLIBS= -lm
 
-OBJ= identification.o fonction.o operathor.o
+OBJ= troisieme.o identification.o fonction.o operathor.o
 DEP= ${OBJ:.o=.d}
 
 all: operathor
