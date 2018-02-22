@@ -383,8 +383,21 @@ void Print_Second_degre(int a, int b, int c)
 			printf("			x1 = (-b + sqrt(D))/ 2*a; x2 = (-b - sqrt(D))/ 2*a \n");
 			printf("Ainsi on otient: \n"); 
 			solutionP(Delta,a,b,solP);
-			printf("			x1 = (-%d + sqrt(%d))/ 2*%d = %.2f\n",b,Delta,a,solP[0]);
-			printf(" 			x2 = (-%d - sqrt(%d))/ 2*%d = %.2f\n",b,Delta,a,solP[1]);
+			if(b < 0)
+			{
+				printf("			x1 = (%d + sqrt(%d))/ 2*%d = %.2f\n",b,Delta,a,solP[0]);
+				printf(" 			x2 = (%d - sqrt(%d))/ 2*%d = %.2f\n",b,Delta,a,solP[1]);
+			}
+			else if(b==0)
+			{
+				printf("			x1 = (sqrt(%d))/ 2*%d = %.2f\n",Delta,a,solP[0]);
+				printf(" 			x2 = (- sqrt(%d))/ 2*%d = %.2f\n",Delta,a,solP[1]);
+			}
+			else
+			{
+				printf("			x1 = (-%d + sqrt(%d))/ 2*%d = %.2f\n",b,Delta,a,solP[0]);
+				printf(" 			x2 = (-%d - sqrt(%d))/ 2*%d = %.2f\n",b,Delta,a,solP[1]);
+			}
 			x1 = Valeur_absolu(solP[0]);
 			x2 = Valeur_absolu(solP[1]);
 			printf("RESULATS:\n");
