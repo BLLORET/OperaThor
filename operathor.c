@@ -4,7 +4,7 @@
 #include "troisieme.h"
 int main(int argc, char *argv[]) {
 
-  if (argc < 2) errx(1 ,"Missing arguments, this program need an equation");
+  if (argc < 2) errx(1 ,"Il manque des arguments, Écrire une équation svp");
   if (argc > 2) errx(1 ,"Too much arguments");
 
   struct coeff *cf = PutExpression(argv[1]);
@@ -56,15 +56,15 @@ int main(int argc, char *argv[]) {
 		printf("Pour résoudre une equation de degre 3 voici les etapes:\n");
 		printf("On a :\n");
 		printf("		f(x) = %s\n",argv[1]);
-		double a1 = cf->left[3];
-		double b1 = cf->left[2];
-		double c1 = cf->left[1];
-		double d1 = cf->left[0];
-		double a2 = cf->right[3];
+		//int a1 = cf->left[3];
+		int b1 = cf->left[2];
+		int c1 = cf->left[1];
+		int d1 = cf->left[0];
+		/*double a2 = cf->right[3];
 		double b2 = cf->right[2];
 		double c2 = cf->right[1];
-		double d2 = cf->right[0];
-		poly(a1,b1,c1,d1,a2,b2,c2,d2);
+		double d2 = cf->right[0];*/
+		troisieme(b1,c1,d1);
 		
 	}
 
