@@ -65,9 +65,9 @@ int main(int argc, char *argv[]) {
 
   //Initialisation et attribution
   int degre = FindDegree(cf->left);
-  if(degre > 4) {
+  if(degre > 5) {
   	printf("Désolé ce solveur ne prend pas les équations de degré supérieur");
-    printf(" à 3. Merci de votre compréhension\n");
+    printf(" à 5. Merci de votre compréhension\n");
 	return 0;
   }
  

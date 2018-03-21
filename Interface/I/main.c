@@ -3,6 +3,9 @@
 #include <err.h>
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
+#include "identification.h"
+#include "fonction_interface.h"
+#include "troisieme_interface.h"
 typedef struct
 {
         GtkBuilder *builder;
@@ -15,6 +18,9 @@ static gchar *X3Cste= NULL;
 static gchar *X2cste= NULL;
 static gchar *Xcste= NULL;
 static gchar *cste= NULL;
+static gchar *DX3Cste= NULL;
+static gchar *DX2cste= NULL;
+static gchar *DXcste= NULL;
 static gchar *Dcste= NULL;
 static gchar *contents =NULL;
 static gchar *name_of_file=NULL;  
@@ -49,6 +55,11 @@ G_MODULE_EXPORT void on_treatment_equation_clicked(){
 	{
 		fprintf(stderr,"NULL");
 	}
+	if(DX3cste==NULL||DX2cste==NULL||DXcste==NULL||Dcste==NULL)
+	{
+		fprintf(stderr,"NULL");
+	}
+	
 }
 int main(int argc, char *argv []){
 	GtkWidget *fenetre_principale = NULL;

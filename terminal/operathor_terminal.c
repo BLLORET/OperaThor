@@ -11,9 +11,9 @@ int main(int argc, char *argv[]) {
 
   //Initialisation et attribution
   int degre = FindDegree(cf->left);
-  if(degre > 4) {
+  if(degre > 5) {
   	printf("Desole ce solveur ne prends pas les equations de degre superieur");
-    printf(" a 3. Merci de votre comprehension\n");
+    printf(" a 5. Merci de votre comprehension\n");
 	return 0;
   }
   printcoeff(cf);
