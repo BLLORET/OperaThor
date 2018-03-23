@@ -10,6 +10,8 @@ struct coeff {
   int *right;
 };
 
+struct coeff *Diff(struct coeff *cf);
+
 int FindDegree(int *tab);
 
 int FindNumber(char *str, char *nb);

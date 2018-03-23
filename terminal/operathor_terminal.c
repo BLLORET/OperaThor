@@ -5,10 +5,24 @@
 int main(int argc, char *argv[]) {
 
   if (argc < 2) errx(1 ,"Il manque des arguments, Écrire une équation svp");
-  if (argc > 2) errx(1 ,"Too much arguments");
+  //if (argc > 2) errx(1 ,"Too much arguments");
 
-  struct coeff *cf = PutExpression(argv[1]);
+  //struct coeff *cf = PutExpression(argv[1]);
+  struct coeff *cf = malloc(sizeof(struct coeff));
+  cf->left = calloc(5, sizeof(int));
+  cf->right = calloc(5, sizeof(int));
 
+  cf->left[0] = atoi(argv[1]);
+  cf->left[1] = atoi(argv[2]);
+  cf->left[2] = atoi(argv[3]);
+  cf->left[3] = atoi(argv[4]);
+  cf->left[4] = atoi(argv[5]);
+
+  cf->right[0] = atoi(argv[6]);
+  cf->right[1] = atoi(argv[7]);
+  cf->right[2] = atoi(argv[8]);
+  cf->right[3] = atoi(argv[9]);
+  cf->right[4] = atoi(argv[10]);
   //Initialisation et attribution
   int degre = FindDegree(cf->left);
   if(degre > 5) {
@@ -17,6 +31,7 @@ int main(int argc, char *argv[]) {
 	return 0;
   }
   printcoeff(cf);
+  Diff(cf);
   int a, b, c;
 
   //INDICATION
