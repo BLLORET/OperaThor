@@ -4,12 +4,12 @@ INDICATION:
 						=> Les valeurs des racines carré sont arrondis a l' entier près ex: sqrt(20) = 4 au lieu de 4,47
 Afin de résoudre notre équation de la forme:
 
-          2X² + 1X + 3 = 5X² + 6X + 3
+          3X² + 1X + 3 = 1X² + 2X
 
 Nous devons tout d'abord tout passer à gauche du égal afin de faciliter la résolution de l'équation.
 Nous obtenons donc l'équation de la forme:
 
-          -3X² - 5X = 0 
+          2X² - 1X + 3 = 0 
 
 Nous pouvons maintenant passer à la résolution de l'équation.
 
@@ -26,32 +26,16 @@ C'est une équation de degré: 2
 Pour résoudre une équation de degré 2 voici les étapes:
 1. On calcule le Delta (note D) :
 			D = b² - 4 * a * c 
-			avec a = -3, b = -5, c = 0 
+			avec a = 2, b = -1, c = 3 
 Ce qui donne :
-			D = -5² - 4*-3*0 = 25
+			D = -1² - 4*2*3 = -23
 2. On regarde maintenant la valeur de D pour savoir le nombre de solutions que possède l'équation: 
-Le D est positif, l'équation a donc deux solutions :
-3. Les solutions s'écrivent donc: 
-			x1 = (-b + sqrt(D))/ 2*a; x2 = (-b - sqrt(D))/ 2*a 
-Ainsi on otient: 
-			x1 = (-5 + sqrt(25))/ 2*-3 = -1,67
- 			x2 = (-5 - sqrt(25))/ 2*-3 = -0,00
-RESULTATS:
- 			=> D = 25 
-			=> x1 = -1,67 
-			=> x2 = -0,00 
-
-4. Nous pouvons maintenant trouver le polynôme factorisé de cette équation:
-RAPPEL : f(x) = a * (x - x1) * (x - x2) ou x1,x2 sont les  solutions de f(x) = 0 (trouvées dans 3. )
-
-Ainsi ici notre polynôme factorisé s'écrit:
-	f(x) = a* x * ( x - x1) car x2 = 0 
-	Donc, f(x) = -3 * x * ( x - 1,67)
+Comme le D est négatif, et comme nous sommes dans l'ensemble réel il n'a donc pas de solutions, nous sommes actuellement dans l'ensemble des complexes
 5. Nous pouvons aussi obtenir la forme canonique de ce trinôme
 
 RAPPEL : la forme canonique de ce trinôme s'écrit:    C(x) = a * [ ( x + ( b / 2 * a) )² - ( D / 4 * a² )] où D est le delta de cette équation. 
 
-				Ici a = -3 , b = -5 , D = 25
+				Ici a = 2 , b = -1 , D = -23
 	On obient donc :
-		=> C(x) = -3 * [ ( x + (-5 / 2 * -3) )² - ( 25 / 4 * -3² )]
-			= -3 * [ ( x + 0,83)² - 0,69]
+		=> C(x) = 2 * [ ( x + (-1 / 2 * 2) )² - ( -23 / 4 * 2² )]
+			= 2 * [ ( x - 0,25)² + 1,44]
