@@ -20,18 +20,18 @@ float sqrt(float n)
 	
 }
 
-struct Complex add_comp(struct Complex a, struct Complex b)
+struct Complex *add_comp(struct Complex a, struct Complex b)
 {
-	struct Complex res = malloc(sizeof(struct Complex));
+	struct Complex *res = malloc(sizeof(struct Complex));
 	res -> img = a -> img + b->img;
 	res->real = a->real+b->real;
 	printf("%fi+%f +%fi+%f = %fi+%f",a->img,a->real,b->img,b->real);	
 }
 
-struct Complex mult_comp(struct Comlex a, struct Complex b)
+struct Complex *mult_comp(struct Complex a, struct Complex b)
 {
-	struct Complex res = malloc(sizeof(struct Complex));
-	res -> real = a->real*b->real+a->img*b->img;
+	struct Complex *res = malloc(sizeof(struct Complex));
+	res -> real = a->real*b->real-a->img*b->img;
 	res ->img = a->real*b->img+b->real*a->img;
 	return res;
 }
