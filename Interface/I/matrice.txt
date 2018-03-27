@@ -1,0 +1,18 @@
+soit i le nombre de lignes et j le nombre de colonnes, alors :
+La somme de deux matrices de type (m, n), A = (a(i,j)) et B = (b(i,j)), notée A + B, est à nouveau une matrice (c(i,j)) de type (m, n) obtenue en additionnant les éléments correspondants :
+			=> c(i,j) = a(i,j) + b(i,j)
+			Donc: 
+ 					pour :
+A  =
+[   0   0   0]
+[   0   0   0]
+[   0   0   0]
+B =
+[   1   2   3]
+[   4   5   6]
+[   7   8   9]
+RESULTAT : 
+ C=
+[   1   2   3]
+[   4   5   6]
+[   7   8   9]
