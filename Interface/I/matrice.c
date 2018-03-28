@@ -59,7 +59,7 @@ static void print_matrix(FILE* file,int mat[], int lines, int cols)
 {
 	
 	for(int i=0; i< lines; i++)
-	{ fprintf(file,"[");
+	{ fprintf(file,"								[");
 		for(int j=0; j< cols; j++)
 		{
 			fprintf(file,"%4d", mat[j+i*cols]);
@@ -87,17 +87,16 @@ void PMatrix(FILE* file,int mat1[],int mat2[],int res[],char* fonction)
 		fprintf(file,"			=> c(i,j) = a(i,j) + b(i,j)\n");
 		fprintf(file,"			Donc: \n");
 		fprintf(file," 					pour :\n");
-		fprintf(file,"A  =\n");
+		fprintf(file,"							A  =\n");
 		print_matrix(file,mat1, lines, cols);
-		fprintf(file,"B =\n");
+		fprintf(file,"							B =\n");
 		print_matrix(file,mat2, lines, cols);
 		fprintf(file,"RESULTAT : \n");
-		fprintf(file," C=\n");
+		fprintf(file," 							C	=\n");
 	  add(mat1,mat2,lines,cols, res);
 		print_matrix(file,res,lines,cols);
 	}
-	
-	if(strncmp(fonction,"soustraction",12)==0)
+	else if(strncmp(fonction,"soustraction",12)==0)
 	{
 		fprintf(file,"soit i le nombre de lignes et j le nombre de colonnes, alors :\n");
 		fprintf(file,"La somme de deux matrices de type (m, n), A = (a(i,j))");
@@ -107,16 +106,16 @@ void PMatrix(FILE* file,int mat1[],int mat2[],int res[],char* fonction)
 		fprintf(file,"			=> c(i,j) = a(i,j) - b(i,j)\n");
 		fprintf(file,"						Donc: \n ");
 		fprintf(file," 							pour :\n");
-		fprintf(file,"A  =\n");
+		fprintf(file,"									A  =\n");
 		print_matrix(file,mat1, lines, cols);
-		fprintf(file,"B =\n");
+		fprintf(file,"									B =\n");
 		print_matrix(file,mat2, lines, cols);
 		fprintf(file,"RESULTAT : \n");
-		fprintf(file," C=\n");
+		fprintf(file," 									C=\n");
 		sub(mat1,mat2,lines,cols,res);
 		print_matrix(file,res,lines,cols);
 	}
-	if(strncmp(fonction,"transpose",9)==0)
+	else if(strncmp(fonction,"transpose",9)==0)
 	{
 		fprintf(file,"La transposée d'une matrice A de type (m,n) notée At du type");
 		fprintf(file," (n,m) est obtenue en échangeant les lignes et ");
@@ -124,22 +123,22 @@ void PMatrix(FILE* file,int mat1[],int mat2[],int res[],char* fonction)
 		fprintf(file,"			=> Si B = At alors : b(i,j) = a(j,i)\n");
 		fprintf(file,"			Donc : \n ");
 		fprintf(file," 				pour : \n");
-		fprintf(file,"A =\n");
+		fprintf(file,"						A =\n");
 		print_matrix(file,mat1,lines,cols);
 		fprintf(file,"RESULTAT :\n");
-		fprintf(file," At =\n");
+		fprintf(file," 						At =\n");
 		transpose(mat1,lines,cols,res);
 		print_matrix(file,res,lines,cols);
 		fprintf(file," 				et pour : \n");
-		fprintf(file,"B =\n");
+		fprintf(file,"						B =\n");
 		print_matrix(file,mat2,lines,cols);
 		fprintf(file,"RESULTAT :\n");
-		fprintf(file," Bt =\n");
+		fprintf(file," 						Bt =\n");
 		transpose(mat2,lines,cols,resT);
 		print_matrix(file,resT,lines,cols);
 		
 	}
-	if(strncmp(fonction,"multiplication",14)==0)
+	else if(strncmp(fonction,"multiplication",14)==0)
 	{
 		fprintf(file,"Si A = (a(i,j)) est une matrice de type (m,n) et B = (b(i,j))");
 		fprintf(file,"est une matrice de type (n,p), alors leur produit, ");
@@ -150,13 +149,21 @@ void PMatrix(FILE* file,int mat1[],int mat2[],int res[],char* fonction)
 	  fprintf(file,"a(i,n)*b(n,j)\n");
 	  fprintf(file,"EXEMPLE : \n ");
 	  fprintf(file,"			Nous allons multiplier ces deux matrices :\n");
-	  fprintf(file,"A =\n");
+	  fprintf(file,"							A =\n");
 	  print_matrix(file,mat1,lines,cols);
-	  fprintf(file,"B =\n");
+	  fprintf(file,"							B =\n");
 	  print_matrix(file,mat2,lines,cols);
 	 	fprintf(file,"RESULTAT : \n ");
-	 	fprintf(file,"C =\n");
+	 	fprintf(file,"							C =\n");
 	  mul(mat1,mat2,cols,lines,cols,res);
     print_matrix(file,res,lines,cols);
+	}
+	else
+	{
+		fprintf(file,"Opérations svp\n");
+		fprintf(file,"			=> addition \n");
+		fprintf(file,"			=> soustraction \n");
+		fprintf(file,"			=> transposée\n");
+		fprintf(file,"			=> multiplication\n");
 	}
 }

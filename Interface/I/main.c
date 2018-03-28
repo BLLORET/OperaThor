@@ -107,18 +107,7 @@ void Make_matrix(int Matrice[], int elm[])
 	}
 }
 
-static void printx(int mat[], int lines, int cols)
-{
-	
-	for(int i=0; i< lines; i++)
-	{ fprintf(stdout,"[");
-		for(int j=0; j< cols; j++)
-		{
-			fprintf(stdout,"%4d", mat[j+i*cols]);
-		}
-		fprintf(stdout,"]\n");
-	}	
-}
+
 G_MODULE_EXPORT void on_treatment_matrice_clicked(){
 	//Récupération 
 	GtkEntry *Matrix11a = GTK_ENTRY(gtk_builder_get_object(data.builder,"Ma11"));
@@ -178,7 +167,6 @@ G_MODULE_EXPORT void on_treatment_matrice_clicked(){
 		atoi(Mb31),atoi(Mb32),atoi(Mb33)};
 	Make_matrix(MatriceA,elmA);
 	Make_matrix(MatriceB,elmB);
-	printx(MatriceB,3,3);
 	FILE* file = NULL;
 	file = fopen("matrice.txt","w");
 	if(file != NULL){
@@ -239,13 +227,6 @@ G_MODULE_EXPORT void on_treatment_matrice_clicked(){
 	cf->right[3]= atoi(DX3cste);
 	cf->right[4] = atoi(DX4cste);
 	int degre = FindDegree(cf->left);
-  if(degre > 5) {
-		if(g_file_get_contents(name_of_file,&contents,NULL,NULL))
-		{
-			texte = "Désolé ce solveur ne prend pas les équations de degré supérieur à 5. Merci de votre compréhension\n";
-			gtk_label_set_text(texte,contents);
-		}
-  }
   //char* argv = 	Expression();
   //PrintMain(cf,degres,argv);
   FreeCoeff(cf);
