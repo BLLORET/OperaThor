@@ -13,9 +13,9 @@ float Abs(float nb)
 	else
 		return nb;
 }
-void Print_degre_trois(FILE *file,int a, int b,int c,char* argv,int degre)
+void Print_degre_trois(FILE *file,int a, int b,int c)
 {
-//INDICATION
+/*/INDICATION
   fprintf(file,"INDICATION:\n");
   fprintf(file,"						=> On ne cherchera les solutions de l'équation");
   fprintf(file," que dans l'ensemble des réels\n");
@@ -30,7 +30,7 @@ void Print_degre_trois(FILE *file,int a, int b,int c,char* argv,int degre)
 
 		fprintf(file,"Pour résoudre une équation de degré 3 voici les étapes:\n");
 		fprintf(file,"On a :\n");
-		fprintf(file,"		f(x) = %s\n",argv);
+		fprintf(file,"		f(x) = %s\n",argv);*/
 	    struct Complex *x2 = malloc(sizeof(struct Complex));
 			fprintf(file,"1. Calcul des coefficients : \n\n");
 			fprintf(file,"Soit p = b - a²/3\n");

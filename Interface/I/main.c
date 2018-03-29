@@ -5,9 +5,10 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include "matrice.h"
-/*#include "identification.h"
+#include "identification.h"
 #include "fonction_interface.h"
-#include "troisieme_interface.h"*/
+#include "troisieme_interface.h"
+#include "PrintMain.h"
 
 typedef struct
 {
@@ -17,7 +18,7 @@ typedef struct
 
 #define taille_max 1000 
 static SGlobalData data;  
-/*static const gchar *X4cste =NULL;
+static const gchar *X4cste =NULL;
 static const gchar *X3cste= NULL;
 static const gchar *X2cste= NULL;
 static const gchar *Xcste= NULL;
@@ -26,7 +27,7 @@ static const gchar *DX4cste =NULL;
 static const gchar *DX3cste= NULL;
 static const gchar *DX2cste= NULL;
 static const gchar *DXcste= NULL;
-static const gchar *Dcste= NULL;*/
+static const gchar *Dcste= NULL;
 static const gchar *Ma11 =NULL;
 static const gchar *Ma12 =NULL;
 static const gchar *Ma13 =NULL;
@@ -62,10 +63,10 @@ static int MatriceB[]= {
   0, 0, 0
 };*/
 
-//static gchar *contents =NULL;
+static gchar *contents =NULL;
 static gchar *contents_matrice =NULL;
 //static gchar *error =NULL;
-//static gchar *name_of_file_equation="équation.txt";
+static gchar *name_of_file_equation="équation.txt";
 static gchar *name_of_file="matrice.txt";  
 static GtkWidget *fenetre_matrice = NULL;
 
@@ -75,18 +76,18 @@ G_MODULE_EXPORT void on_quit_clicked(){
 G_MODULE_EXPORT void on_MainWindow_clicked(){
 	gtk_main_quit();
 }
-/*G_MODULE_EXPORT void on_Display_text_clicked(){
+G_MODULE_EXPORT void on_Display_text_clicked(){
 	GtkLabel *texte_equation = GTK_LABEL(
-			gtk_builder_get_object(data.builder, "label"));
-	if(NULL == texte)
+			gtk_builder_get_object(data.builder, "resolution"));
+	if(NULL == texte_equation)
 	{
 		fprintf(stderr,"label do not exist");
 	}
-	if(g_file_get_contents(name_of_file,&contents,NULL,NULL))
+	if(g_file_get_contents(name_of_file_equation,&contents,NULL,NULL))
 	{
-		gtk_label_set_text(texte,contents);
+		gtk_label_set_text(texte_equation,contents);
 	}
-}*/
+}
 G_MODULE_EXPORT void on_Matrice_Display_text_clicked(){
 	GtkLabel *texte_matrice = GTK_LABEL(
 			gtk_builder_get_object(data.builder, "matrice"));
@@ -178,7 +179,7 @@ G_MODULE_EXPORT void on_treatment_matrice_clicked(){
 	PMatrix(file,MatriceA,MatriceB,res,(char*)choice);
 	fclose(file);}
 } 
-/*G_MODULE_EXPORT void on_treatment_equation_clicked(){
+G_MODULE_EXPORT void on_treatment_equation_clicked(){
 		//GtkLabel *texte = GTK_LABEL(
 	 //gtk_builder_get_object(data.builder, "resolution"));
 	GtkEntry *saisie4 = GTK_ENTRY(gtk_builder_get_object(data.builder,"X⁴cste"));
@@ -192,9 +193,9 @@ G_MODULE_EXPORT void on_treatment_matrice_clicked(){
 	GtkEntry *saisieD1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"DXcste"));
 	GtkEntry *saisieD = GTK_ENTRY(gtk_builder_get_object(data.builder,"Dcste"));
 	struct coeff *cf = malloc(sizeof(struct coeff));
-  cf->left = calloc(5, sizeof(int));
-  cf->right = calloc(5, sizeof(int));
-  X4cste =  gtk_entry_get_text(saisie4);
+  	cf->left = calloc(5, sizeof(int));
+  	cf->right = calloc(5, sizeof(int));
+  	X4cste =  gtk_entry_get_text(saisie4);
 	X3cste =  gtk_entry_get_text(saisie3);
 	X2cste =  gtk_entry_get_text(saisie2);
 	Xcste =  gtk_entry_get_text(saisie1);
@@ -204,10 +205,10 @@ G_MODULE_EXPORT void on_treatment_matrice_clicked(){
 	DX2cste =  gtk_entry_get_text(saisieD2);
 	DXcste =  gtk_entry_get_text(saisieD1);
 	Dcste = gtk_entry_get_text(saisieD);
-	if(NULL == texte)
+	/*if(NULL == texte)
 	{
 		fprintf(stderr,"label do not exist");
-	}
+	}*/
 	if(X3cste==NULL||X2cste==NULL||Xcste==NULL||cste==NULL)
 	{
 		fprintf(stderr,"NULL");
@@ -227,10 +228,14 @@ G_MODULE_EXPORT void on_treatment_matrice_clicked(){
 	cf->right[3]= atoi(DX3cste);
 	cf->right[4] = atoi(DX4cste);
 	int degre = FindDegree(cf->left);
-  //char* argv = 	Expression();
-  //PrintMain(cf,degres,argv);
+	FILE* file = NULL;
+	file = fopen("équation.txt","w");
+	if(file != NULL){
+  	Printmain(file,cf,degre);
+      
+	}
   FreeCoeff(cf);
-}*/
+}
 
 
 G_MODULE_EXPORT void on_Matrice_clicked(){

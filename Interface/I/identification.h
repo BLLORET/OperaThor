@@ -10,12 +10,14 @@ struct coeff {
   int *right;
 };
 
+void *Diff(FILE* file,struct coeff *cf);
+
 int FindDegree(int *tab);
 
 int FindNumber(char *str, char *nb);
 
-struct coeff *PutExpression(char *str);
+//struct coeff *PutExpression(char *str);
 
-void printcoeff(struct coeff *cf);
+//void printcoeff(struct coeff *cf);
 
 void FreeCoeff(struct coeff *cf);
