@@ -5,9 +5,6 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include "matrice.h"
-#include "identification.h"
-#include "fonction_interface.h"
-#include "troisieme_interface.h"
 #include "PrintMain.h"
 
 typedef struct
@@ -182,19 +179,17 @@ G_MODULE_EXPORT void on_treatment_matrice_clicked(){
 G_MODULE_EXPORT void on_treatment_equation_clicked(){
 		//GtkLabel *texte = GTK_LABEL(
 	 //gtk_builder_get_object(data.builder, "resolution"));
-	GtkEntry *saisie4 = GTK_ENTRY(gtk_builder_get_object(data.builder,"X⁴cste"));
-	GtkEntry *saisie3 = GTK_ENTRY(gtk_builder_get_object(data.builder,"X³cste"));
-	GtkEntry *saisie2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"X²cste"));
-	GtkEntry *saisie1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"Xcste"));
+	GtkEntry *saisie4 = GTK_ENTRY(gtk_builder_get_object(data.builder,"4cste"));
+	GtkEntry *saisie3 = GTK_ENTRY(gtk_builder_get_object(data.builder,"3cste"));
+	GtkEntry *saisie2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"2cste"));
+	GtkEntry *saisie1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"1cste"));
 	GtkEntry *saisie = GTK_ENTRY(gtk_builder_get_object(data.builder,"cste"));
-	GtkEntry *saisieD4 = GTK_ENTRY(gtk_builder_get_object(data.builder,"DX⁴cste"));
-	GtkEntry *saisieD3 = GTK_ENTRY(gtk_builder_get_object(data.builder,"DX³cste"));
-	GtkEntry *saisieD2= GTK_ENTRY(gtk_builder_get_object(data.builder,"DX²cste"));
-	GtkEntry *saisieD1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"DXcste"));
+	GtkEntry *saisieD4 = GTK_ENTRY(gtk_builder_get_object(data.builder,"D4cste"));
+	GtkEntry *saisieD3 = GTK_ENTRY(gtk_builder_get_object(data.builder,"D3cste"));
+	GtkEntry *saisieD2= GTK_ENTRY(gtk_builder_get_object(data.builder,"D2cste"));
+	GtkEntry *saisieD1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"D1cste"));
 	GtkEntry *saisieD = GTK_ENTRY(gtk_builder_get_object(data.builder,"Dcste"));
-	struct coeff *cf = malloc(sizeof(struct coeff));
-  	cf->left = calloc(5, sizeof(int));
-  	cf->right = calloc(5, sizeof(int));
+	
   	X4cste =  gtk_entry_get_text(saisie4);
 	X3cste =  gtk_entry_get_text(saisie3);
 	X2cste =  gtk_entry_get_text(saisie2);
@@ -217,6 +212,9 @@ G_MODULE_EXPORT void on_treatment_equation_clicked(){
 	{
 		fprintf(stderr,"NULL");
 	}
+struct coeff *cf = malloc(sizeof(struct coeff));
+  	cf->left = calloc(5, sizeof(int));
+  	cf->right = calloc(5, sizeof(int));
 	cf->left[0]= atoi(cste);
 	cf->left[1]= atoi(Xcste);
 	cf->left[2] =atoi(X2cste);
@@ -232,7 +230,7 @@ G_MODULE_EXPORT void on_treatment_equation_clicked(){
 	file = fopen("équation.txt","w");
 	if(file != NULL){
   	Printmain(file,cf,degre);
-      
+      	fclose(file);
 	}
   FreeCoeff(cf);
 }

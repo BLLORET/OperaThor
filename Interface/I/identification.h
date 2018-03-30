@@ -10,7 +10,7 @@ struct coeff {
   int *right;
 };
 
-void *Diff(FILE* file,struct coeff *cf);
+struct coeff *Diff(FILE* file,struct coeff *cf);
 
 int FindDegree(int *tab);
 

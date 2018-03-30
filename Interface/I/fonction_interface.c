@@ -84,7 +84,7 @@ int char_to_int(char c)
 	return n;
 }
 //Affochage equations premier degré
-void Print_premier_degre(FILE *file,int a, int b, int c,char* argv,int degre)
+void Print_premier_degre(FILE *file,int a, int b, int c,int degre)
 {
 	//INDICATION
   fprintf(file,"INDICATION:\n");
@@ -96,15 +96,12 @@ void Print_premier_degre(FILE *file,int a, int b, int c,char* argv,int degre)
   //RESOLUTION
   fprintf(file,"RESOLUTION:\n");
   fprintf(file,"\n");
-  fprintf(file,"On cherche à résoudre l'équation suivante: %s \n",argv);
+  //fprintf(file,"On cherche à résoudre l'équation suivante: %s \n",argv);
   fprintf(file,"C'est une équation de degré: %d \n",degre);
 	int d,f,res,vres;
 	float sol;
 	fprintf(file,"Pour résoudre une équation de degré 1 voici les étapes:\n");
-	fprintf(file,"On a :\n");
- 	fprintf(file,"		f(x) = %s\n",argv);
-	fprintf(file,"1. On passe tout d'un même côté en faisant attention ");
-	fprintf(file,"aux signes. Si on a déjà  = 0 alors cela ne changera rien\n");
+	fprintf(file,"1. On a donc cette équation\n");
 	if(c ==0)
 	{
 			if(b > 0)
@@ -339,7 +336,7 @@ static void Print_canonique(FILE *file,int a, int b, int Delta)
 }
 
 //Affichage des equations du second degré
-void Print_Second_degre(FILE *file,int a, int b, int c,char* argv,int degre)
+void Print_Second_degre(FILE *file,int a, int b, int c,int degre)
 {
 	float solP[2]={};
 	float solution;
@@ -356,7 +353,7 @@ void Print_Second_degre(FILE *file,int a, int b, int c,char* argv,int degre)
   //RESOLUTION
   fprintf(file,"RESOLUTION:\n");
   fprintf(file,"\n");
-  fprintf(file,"On cherche à résoudre l'équation suivante: %s \n",argv);
+  //fprintf(file,"On cherche à résoudre l'équation suivante: %s \n",argv);
   fprintf(file,"C'est une équation de degré: %d \n",degre);
 	//Calcul du Delta
 	int Delta= delta(a,b,c);

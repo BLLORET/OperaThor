@@ -57,7 +57,7 @@ static void printCoeffs(FILE* file,struct coeff *cf) {
 }
 
 
-void *Diff(FILE* file,struct coeff *cf) {
+struct coeff *Diff(FILE* file,struct coeff *cf) {
   fprintf(file,"Afin de résoudre notre équation de la forme:\n\n");
   printCoeffs(file,cf);
   fprintf(file,"Nous devons tout d'abord tout passer à gauche du égal afin de");
@@ -69,6 +69,7 @@ void *Diff(FILE* file,struct coeff *cf) {
   }
   printCoeffs(file,cf);
   fprintf(file,"Nous pouvons maintenant passer à la résolution de l'équation.\n\n");
+  return cf;
 }
 
 int FindDegree(int *tab) {

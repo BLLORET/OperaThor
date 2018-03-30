@@ -12,8 +12,8 @@ if(degre > 5) {
   fprintf(file," que dans l'ensemble des réels\n");
   fprintf(file,"						=> sqrt() = racine carré \n");
   fprintf(file,"						=> Les valeurs des racines carré sont arrondis a l'");
-  fprintf(file" entier près ex: sqrt(20) = 4 au lieu de 4,47\n");
-  cf = Diff(cf);
+  fprintf(file," entier près ex: sqrt(20) = 4 au lieu de 4,47\n");
+  cf = Diff(file,cf);
   int a, b, c;
 
  
@@ -26,7 +26,7 @@ if(degre > 5) {
 	b = cf->left[1];
 	c = cf->left[0];
 
-	Print_Second_degre(a, b, c);
+	Print_Second_degre(file,a, b, c,degre);
   }                                           
   /**************************************************************/	
   if(degre == 1) {
@@ -34,7 +34,7 @@ if(degre > 5) {
 	a = cf->left[1];
 	b = cf->left[0];
 	c = cf->right[0];
-	Print_premier_degre(a,b,c);
+	Print_premier_degre(file,a,b,c,degre);
   }
 	if(degre ==3)
 	{

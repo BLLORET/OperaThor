@@ -152,7 +152,7 @@
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
                 <child>
-                  <object class="GtkEntry" id="X⁴cste">
+                  <object class="GtkEntry" id="4cste">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -187,7 +187,7 @@
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
                 <child>
-                  <object class="GtkEntry" id="X³cste">
+                  <object class="GtkEntry" id="3cste">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -222,7 +222,7 @@
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
                 <child>
-                  <object class="GtkEntry" id="X²cste">
+                  <object class="GtkEntry" id="2cste">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -257,7 +257,7 @@
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
                 <child>
-                  <object class="GtkEntry" id="Xcste">
+                  <object class="GtkEntry" id="1cste">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -292,7 +292,7 @@
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="cste">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -322,14 +322,26 @@
             <property name="can_focus">False</property>
             <property name="homogeneous">True</property>
             <child>
-              <object class="GtkEntry" id="DX⁴cste">
+              <object class="GtkLabel" id="egal">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">=</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="D4cste">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -341,23 +353,11 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="egal">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">=</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="DX³cst">
+              <object class="GtkEntry" id="D3cste">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
               </object>
@@ -380,7 +380,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="DX²cste">
+              <object class="GtkEntry" id="D2cste">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
               </object>
@@ -403,7 +403,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="DXcste">
+              <object class="GtkEntry" id="D1cste">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
               </object>
@@ -440,7 +440,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
@@ -488,9 +488,32 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="resolution">
+          <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <child>
+              <object class="GtkLabel" id="resolution">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrollbar">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>
