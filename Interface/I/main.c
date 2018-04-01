@@ -67,13 +67,24 @@ static gchar *name_of_file_equation="équation.txt";
 static gchar *name_of_file="matrice.txt";  
 static GtkWidget *fenetre_matrice = NULL;
 
+static GtkWidget *fenetre_d = NULL;
+static GtkWidget *fenetre_interpolation = NULL;
+
 G_MODULE_EXPORT void on_quit_clicked(){
 	gtk_main_quit();
 }
 G_MODULE_EXPORT void on_MainWindow_clicked(){
 	gtk_main_quit();
 }
+G_MODULE_EXPORT void on_quitte_clicked(){
+	gtk_widget_destroy(fenetre_interpolation);
+}
+
 G_MODULE_EXPORT void on_Display_text_clicked(){
+fenetre_d = GTK_WIDGET(gtk_builder_get_object(data.builder,"display"));
+			 gtk_widget_show_all (fenetre_d);
+			 gtk_window_set_title(GTK_WINDOW(fenetre_d),"Résolution de l'équation");
+			 gtk_window_set_default_size(GTK_WINDOW(fenetre_d),500,1700);
 	GtkLabel *texte_equation = GTK_LABEL(
 			gtk_builder_get_object(data.builder, "resolution"));
 	if(NULL == texte_equation)
@@ -104,7 +115,7 @@ void Make_matrix(int Matrice[], int elm[])
 				Matrice[i]=elm[i];
 	}
 }
-
+G_MODULE_EXPORT void on_treatment_interpole_clicked(){}
 
 G_MODULE_EXPORT void on_treatment_matrice_clicked(){
 	//Récupération 
@@ -234,11 +245,16 @@ struct coeff *cf = malloc(sizeof(struct coeff));
 	}
   FreeCoeff(cf);
 }
-
+G_MODULE_EXPORT void on_Interpolation_clicked(){
+			fenetre_interpolation= GTK_WIDGET(gtk_builder_get_object(data.builder,"Interpole"));
+			 gtk_widget_show_all (fenetre_interpolation);
+			 gtk_window_set_title(GTK_WINDOW(fenetre_interpolation),"Interpolation");
+}
 
 G_MODULE_EXPORT void on_Matrice_clicked(){
 			fenetre_matrice = GTK_WIDGET(gtk_builder_get_object(data.builder,"Matrix"));
 			 gtk_widget_show_all (fenetre_matrice);
+			 gtk_window_set_title(GTK_WINDOW(fenetre_matrice),"Matrix");
 }
 G_MODULE_EXPORT void on_Matrice_quit_clicked(){
 			gtk_widget_destroy(fenetre_matrice);
@@ -268,7 +284,7 @@ int main(int argc, char *argv []){
     gtk_builder_connect_signals (data.builder, &data);
     /* Pointer recovery from the main window */
     fenetre_principale = GTK_WIDGET(gtk_builder_get_object (data.builder, "MainWindow"));
-    
+    gtk_window_set_title(GTK_WINDOW(fenetre_principale),"Solveur");
     /* Showing the main window */
     gtk_widget_show_all (fenetre_principale);
     gtk_main();
