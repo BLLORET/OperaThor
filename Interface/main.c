@@ -81,7 +81,7 @@ static gchar *name_of_file_equation="équation.txt";
 static gchar *name_of_file_system="systeme.txt";
 static gchar *name_of_file="matrice.txt";  
 static GtkWidget *fenetre_matrice = NULL;
-
+static GtkWidget *fenetre_system= NULL;
 static GtkWidget *fenetre_d = NULL;
 static GtkWidget *fenetre_interpolation = NULL;
 
@@ -139,6 +139,16 @@ void Make_matrix(int Matrice[], int elm[])
 	}
 }
 G_MODULE_EXPORT void on_treatment_interpole_clicked(){}
+
+G_MODULE_EXPORT void on_Systeme_clicked(){
+			fenetre_system = GTK_WIDGET(gtk_builder_get_object(data.builder,"System"));
+			 gtk_widget_show_all (fenetre_system);
+			 gtk_window_set_title(GTK_WINDOW(fenetre_system),"linear system");
+}
+
+G_MODULE_EXPORT void on_qUIT_clicked(){
+gtk_widget_destroy(fenetre_system);
+}
 G_MODULE_EXPORT void on_treatment_system_clicked()
 {
 	GtkEntry *x1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x1cste"));
