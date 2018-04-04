@@ -1,0 +1,134 @@
+<html>
+	<head>
+		<Title>Histoire</Title>
+		<link rel="stylesheet" type="text/css" href="stylenotice.css">
+		<Meta charset="UTF-8">
+	</Head>
+	</head>
+	<body>
+		<div id= "banner1">
+	    </div>
+		<div id= "menu">
+			<ul>
+				<li><a href="accueil.html">Accueil</a></li>
+				<li><a href="presentation du projet.html">Présentation du projet</a></li>
+				<li><a href="telechargement.html">Téléchargement</a></li>
+			</ul>
+		</div>
+		<div id= "banner2">
+	    </div>
+	    <div id="Legende">
+	    	<div align="center">
+	    		<br/>
+	    		<U> Mis à disposition</U>
+	   		 </div>
+	    </div>
+		
+		<div id="contenu3">
+			<p>
+				Ce logiciel permet de solver des équations de degré inférieur à cinq. La résolution de ces équations étant différentes les unes des autres nous les détaillons étape par étape avec parfois quelques rappel ou éclaircissements sur telle ou telle écriture. Il met aussi à disposition un solveur d'opérations simples sur les matrices comme par exemple l'addition, la soustraction etc. Il y a aussi un fonctionnement d'interpolation, qui n'est pas encore vraiment opérationnel.
+			</p>
+		</div>
+		<div id="contenu2">
+			<p>
+				<div align="center">
+					<U>Notice d'utilisation</U>
+				</div>
+			</p>	
+		</div>
+		<div id="contenu3">
+			<p>
+				Si vous utilisez le mode terminal : <br><br>
+				- Télécharger le dossier que vous trouverez à la page &laquo Téléchargement &raquo. <br>
+				- Puis ouvrez un terminal et aller dans le dossier &laquo <I>terminal</I> &raquo. <br>
+				- Une fois que vous vous y trouvez, écrivez &laquo <I>make</I> &raquo en ligne de commande.<br>
+				- Ensuite une fois cela fait, vous devez mettre d'abord l'exécutable c'est-à-dire:<br>
+				Exemple : <br>
+				<div align="center">
+					./operathor <br>
+				</div>
+				- Puis pour entrer une équation d'un certain degré voici l'écriture : <br>
+				Exemple : <br>
+				<div align="center">
+					4x^2+6x^1+3x^0=0x^0<br>
+				</div>
+				Ce qui donne en image : <br>
+				<div align="center">
+	        		<img src="exemple.png"/><br/><br/>
+	        	</div>
+				Pour avoir un exemple d'opération sur les matrices, suivez les instructions suivantes :<br>
+				- Ouvrez un terminal et aller dans le dossier &laquo <I>Matrix</I> &raquo du dossier principal.<br>
+				- Une fois que vous vous y trouvez, écrivez &laquo <I>make</I> &raquo en ligne de commande.<br>
+				- Ensuite une fois cela fait, vous devez mettre d'abord l'exécutable c'est-à-dire:<br>
+				Exemple : <br>
+				<div align="center">
+					./matrix <br>
+				</div>
+				- Préciser quelle exemple d'opération vous voulez avoir : <br>
+				Exemple :<br>
+				<div align="center">
+					addition <br>
+				</div>
+				Ce qui donne en image : <br>
+				<div align="center">
+	        		<img src="exemple2.png"/><br/><br/>
+	        	</div>
+	        	Pour effectuer une interpolation linéaire ou polynômiales, suivez les instructions suivantes :
+	        	- Ouvrez un terminal et aller dans le dossier &laquo <I>interpolation</I> &raquo du dossier principal.<br>
+				- Une fois que vous vous y trouvez, écrivez &laquo <I>make</I> &raquo en ligne de commande.<br>
+				- Ensuite une fois cela fait, vous devez mettre d'abord l'exécutable c'est-à-dire:<br>
+				Exemple : <br>
+				<div align="center">
+					./interpolation <br>
+				</div>
+				- Préciser quelle exemple d'opération vous voulez avoir : <br>
+				Exemple :<br>
+				<div align="center">
+					lineaire <br>
+				</div>
+				- Pour l'interpolation linéaire on vous demandera de rentrer deux valeurs d'abscisses et d'ordonnées. 
+				- Pour l'interpolation polynômiale selon le degré que vous rentrerez en premier il vous sera demandés un nombre différent de valeurs d'abscisses et d'ordonnées. 
+				<div align="center">
+	        		<img src="interpolation.png"/><br/><br/>
+	        	</div>
+	        	Ce qui donne : <br>
+	        	=> Pour l'interpolation linéaire :<br>
+	        	<div align="center">
+	        		<img src="interpolation2.png"/><br/><br/>
+	        	</div>
+	        	=> Pour l'interpolation polynômiales :<br>
+	        	<div align="center">
+	        		<img src="interpolation3.png"/><br/><br/>
+	        	</div>
+			</p>
+			<p>
+				Si vous utilisez le mode interface : <br><br>
+				- Télécharger le dossier que vous trouverez à la page &laquo Téléchargement &raquo. <br>
+				- Puis ouvrez un terminal et aller dans le dossier &laquo <I>Interface/I/</I> &raquo. <br>
+				- Une fois que vous vous y trouvez, écrivez &laquo <I>make</I> &raquo en ligne de commande.<br>
+				- Ensuite une fois cela fait, vous devez mettre d'abord l'exécutable c'est-à-dire:<br>
+				Exemple : <br>
+				<div align="center">
+					./main <br>
+				</div>
+				Une fenêtre va alors s'ouvrir comme ceci : 
+				<div align="center">
+	        		<img src="interface.png"/><br/><br/>
+	        	</div>
+	        	Comme vous pouvez le voir vous avez à votre disposition la résolution d'équation, celle matricielle, celle des systèmes linéaires et l'interpolation.
+	        	Si vous voulez faire une résolution matricielle cliquer sur le bouton  &laquo <I>Matrix</I> &raquo et une fenêtre va alors s'ouvrir.
+	        	<div align="center">
+	        		<img src="matrix.png"/><br/><br/>
+	        	</div>
+	        	Comme vous pouvez le voir vous avez la possibilité de choisir les valeurs de votre matrice qui possède une taille fixe. Vous devez là encore préciser si vous voulez les additionner, les transposer, les multiplier ou encore les soustraire. Puis vous cliquer sur le bouton &laquo <I>treatment_matrix</I> &raquo qui comme son nom l'indique va vous faire votre résolution. Pour afficher celle-ci il n'y a qu'à appuyer sur le bouton &laquo <I>Dislplay_text</I> &raquo.
+	        	Si vous voulez la résolution de système linéaire cliquer sur le bouton  &laquo <I>System</I> &raquo et une fenêtre va alors s'ouvrir.		
+	        	<br><br>
+	        	Si vous voulez l'interpolation de points elle n'est pas encore disponible.
+	        </p>
+		</div>
+			<br/><br/><br/><br/><br/><br/><br/><br/>
+		<div id="footer">
+			<p>BOS' |  OperaThor</p>
+		</div>
+	</body>
+</html>
