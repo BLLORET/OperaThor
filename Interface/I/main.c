@@ -72,22 +72,23 @@ static GtkWidget *fenetre_d = NULL;
 static GtkWidget *fenetre_interpolation = NULL;
 
 G_MODULE_EXPORT void on_quit_clicked(){
-	char* cmd[]={"rm","équation.txt",NULL};
+char* cmd[]={"rm","équation.txt",NULL};
 	execvp(cmd[0],cmd);
 	gtk_main_quit();
 }
 G_MODULE_EXPORT void on_MainWindow_clicked(){
 	gtk_main_quit();
 }
+
 G_MODULE_EXPORT void on_quitte_clicked(){
 	gtk_widget_destroy(fenetre_interpolation);
 }
 
 G_MODULE_EXPORT void on_Display_text_clicked(){
-fenetre_d = GTK_WIDGET(gtk_builder_get_object(data.builder,"display"));
+		fenetre_d = GTK_WIDGET(gtk_builder_get_object(data.builder,"display"));
 			 gtk_widget_show_all (fenetre_d);
 			 gtk_window_set_title(GTK_WINDOW(fenetre_d),"Résolution de l'équation");
-			 gtk_window_set_default_size(GTK_WINDOW(fenetre_d),500,2000);
+			 gtk_window_set_default_size(GTK_WINDOW(fenetre_d),100,2000);
 	GtkLabel *texte_equation = GTK_LABEL(
 			gtk_builder_get_object(data.builder, "resolution"));
 	if(NULL == texte_equation)
@@ -98,6 +99,11 @@ fenetre_d = GTK_WIDGET(gtk_builder_get_object(data.builder,"display"));
 	{
 		gtk_label_set_text(texte_equation,contents);
 	}
+}
+G_MODULE_EXPORT void on_quitt_clicked(){
+		
+gtk_widget_destroy(fenetre_d);
+
 }
 G_MODULE_EXPORT void on_Matrice_Display_text_clicked(){
 	GtkLabel *texte_matrice = GTK_LABEL(
