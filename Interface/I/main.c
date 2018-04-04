@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <err.h>
+#include <unistd.h>
 #include <math.h>
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
@@ -71,6 +72,8 @@ static GtkWidget *fenetre_d = NULL;
 static GtkWidget *fenetre_interpolation = NULL;
 
 G_MODULE_EXPORT void on_quit_clicked(){
+	char* cmd[]={"rm","équation.txt",NULL};
+	execvp(cmd[0],cmd);
 	gtk_main_quit();
 }
 G_MODULE_EXPORT void on_MainWindow_clicked(){
@@ -84,7 +87,7 @@ G_MODULE_EXPORT void on_Display_text_clicked(){
 fenetre_d = GTK_WIDGET(gtk_builder_get_object(data.builder,"display"));
 			 gtk_widget_show_all (fenetre_d);
 			 gtk_window_set_title(GTK_WINDOW(fenetre_d),"Résolution de l'équation");
-			 gtk_window_set_default_size(GTK_WINDOW(fenetre_d),500,1700);
+			 gtk_window_set_default_size(GTK_WINDOW(fenetre_d),500,2000);
 	GtkLabel *texte_equation = GTK_LABEL(
 			gtk_builder_get_object(data.builder, "resolution"));
 	if(NULL == texte_equation)
@@ -286,6 +289,7 @@ int main(int argc, char *argv []){
     fenetre_principale = GTK_WIDGET(gtk_builder_get_object (data.builder, "MainWindow"));
     gtk_window_set_title(GTK_WINDOW(fenetre_principale),"Solveur");
     /* Showing the main window */
+    gtk_window_set_default_size(GTK_WINDOW(fenetre_principale),100,150);
     gtk_widget_show_all (fenetre_principale);
     gtk_main();
     return 0;

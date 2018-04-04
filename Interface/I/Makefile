@@ -8,7 +8,7 @@ LDFLAGS=
 LDLIBS= `pkg-config --libs gtk+-3.0` -lm -export-dynamic -rdynamic
  
 OBJ= main.o matrice.o troisieme_interface.o identification.o fonction_interface.o PrintMain.o
-DEP= ${SRC:.o=.d}
+DEP= ${OBJ:.o=.d}
  
 all: main
  
