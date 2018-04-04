@@ -3,10 +3,12 @@
 #include <err.h>
 #include <unistd.h>
 #include <math.h>
+
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include "matrice.h"
 #include "PrintMain.h"
+#include "syst.h"
 
 typedef struct
 {
@@ -44,6 +46,16 @@ static const gchar *Mb23 =NULL;
 static const gchar *Mb31 =NULL;
 static const gchar *Mb32 =NULL;
 static const gchar *Mb33 =NULL;
+
+
+
+static const gchar *X1 =NULL;
+static const gchar *X2 =NULL;
+static const gchar *Y1 =NULL;
+static const gchar *Y2 =NULL;
+static const gchar *C1 =NULL;
+static const gchar *C2 =NULL;
+
 static const gchar* choice =NULL;
 static int MatriceA[]= {
   0, 0, 0,
@@ -63,8 +75,10 @@ static int MatriceB[]= {
 
 static gchar *contents =NULL;
 static gchar *contents_matrice =NULL;
+static gchar *contents_syst =NULL;
 //static gchar *error =NULL;
 static gchar *name_of_file_equation="équation.txt";
+static gchar *name_of_file_system="systeme.txt";
 static gchar *name_of_file="matrice.txt";  
 static GtkWidget *fenetre_matrice = NULL;
 
@@ -125,7 +139,43 @@ void Make_matrix(int Matrice[], int elm[])
 	}
 }
 G_MODULE_EXPORT void on_treatment_interpole_clicked(){}
-
+G_MODULE_EXPORT void on_treatment_system_clicked()
+{
+	GtkEntry *x1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x1cste"));
+	GtkEntry *x2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x2cste"));
+	GtkEntry *y1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"y1cste"));
+	GtkEntry *y2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"y2cste"));
+	GtkEntry *c1= GTK_ENTRY(gtk_builder_get_object(data.builder,"1cst"));
+	GtkEntry *c2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"2cst"));
+	X1=  gtk_entry_get_text(x1);
+	X2 =  gtk_entry_get_text(x2);
+  Y1 =  gtk_entry_get_text(y1);
+	Y2 =  gtk_entry_get_text(y2);
+	C1 =  gtk_entry_get_text(c1);
+	C2 =  gtk_entry_get_text(c2);
+	//size_t column = 3;
+	float inco[1 * 3 + 3];
+	inco[0 * 3 + 0] = atof(X1); // 0
+	inco[0 * 3 + 1] = atof(Y1);  // 1
+	inco[0 * 3 + 2] = atof(C1);  // 2
+	inco[1 * 3 + 0] = atof(X2);  // 3
+	inco[1 * 3 + 1] = atof(Y2);  // 4
+	inco[1 * 3 + 2] =	atof(C2);  // 5
+	FILE *file =fopen("systeme.txt","w");
+	if(file != NULL){
+	solveur_2_inconnu(file,inco);
+	fclose(file);}
+		GtkLabel *texte_systeme = GTK_LABEL(
+			gtk_builder_get_object(data.builder, "solver"));
+	if(NULL == texte_systeme)
+	{
+		fprintf(stderr,"label do not exist");
+	}
+	if(g_file_get_contents(name_of_file_system,&contents_syst,NULL,NULL))
+	{
+		gtk_label_set_text(texte_systeme,contents_syst);
+	}
+}
 G_MODULE_EXPORT void on_treatment_matrice_clicked(){
 	//Récupération 
 	GtkEntry *Matrix11a = GTK_ENTRY(gtk_builder_get_object(data.builder,"Ma11"));
