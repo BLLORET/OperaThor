@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Complex
+/*struct Complex
 {
 	float real;
 	float img;
-}
+}*/
 
-float sqrt(float n);
+float mysqrt(float n);
 
-float sqrt(float n)
+float mysqrt(float n)
 {
 	float x = n;
 	while(x>n/x)
@@ -20,7 +20,7 @@ float sqrt(float n)
 	
 }
 
-struct Complex *add_comp(struct Complex a, struct Complex b)
+/*struct Complex *add_comp(struct Complex a, struct Complex b)
 {
 	struct Complex *res = malloc(sizeof(struct Complex));
 	res -> img = a -> img + b->img;
@@ -34,9 +34,9 @@ struct Complex *mult_comp(struct Complex a, struct Complex b)
 	res -> real = a->real*b->real-a->img*b->img;
 	res ->img = a->real*b->img+b->real*a->img;
 	return res;
-}
+}*/
 
 void main()
 {
-	
+printf("%f", mysqrt(4));	
 }
