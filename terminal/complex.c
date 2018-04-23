@@ -1,15 +1,6 @@
-# include <stdio.h>
-# include <stdlib.h>
-# include <math.h>
+# include "complex.h"
 
-//#define _DEFAULT_SOURCE
-
-struct Complex {
-  float real;
-  float img;
-};
-
-void Print_Complex0f(struct Complex *comp) {
+static void Print_Complex0f(struct Complex *comp) {
   if (comp->real == 0 && comp->img == 0) {
   	printf("0 ");
   } else {
@@ -29,7 +20,7 @@ void Print_Complex0f(struct Complex *comp) {
   }
 }
 
-void Print_Complex(struct Complex *comp) {
+static void Print_Complex(struct Complex *comp) {
   if (comp->real == 0 && comp->img == 0) {
   	printf("0 ");
   } else {
@@ -49,28 +40,28 @@ void Print_Complex(struct Complex *comp) {
   }
 }
 
-struct Complex *add_comp(struct Complex *a, struct Complex *b) {
+static struct Complex *add_comp(struct Complex *a, struct Complex *b) {
   struct Complex *res = malloc(sizeof(struct Complex));
   res->real = a->real + b->real;
   res->img = a->img + b->img;
   return res;
 }
 
-struct Complex *mult_comp(struct Complex *a, struct Complex *b) {
+static struct Complex *mult_comp(struct Complex *a, struct Complex *b) {
 	struct Complex *res = malloc(sizeof(struct Complex));
 	res->real = a->real * b->real - a->img * b->img;
 	res ->img = a->real * b->img + b->real * a->img;
 	return res;
 }
 
-struct Complex *conjugue(struct Complex *a) {
+static struct Complex *conjugue(struct Complex *a) {
   struct Complex *b = malloc(sizeof(struct Complex));
   b->real = a->real;
   b->img = -a->img;
   return b;
 }
 
-struct Complex *div_comp(struct Complex *a, struct Complex *b) {
+static struct Complex *div_comp(struct Complex *a, struct Complex *b) {
   printf("                ( ");
   Print_Complex0f(a);
   printf(") / ( ");
@@ -161,14 +152,14 @@ void Soustration(struct Complex *a, struct Complex *b) {
   free(res);
 }
 
-void Print_parenth(float n) {
+static void Print_parenth(float n) {
   if (n < 0)
   	printf("(%0.f)", n);
   else
   	printf("%0.f", n);
 }
 
-void PrintMulInt1(struct Complex *a, struct Complex *b) {
+static void PrintMulInt1(struct Complex *a, struct Complex *b) {
   // a * c
   printf("%0.f * ", a->real);
   Print_parenth(b->real);
@@ -185,7 +176,7 @@ void PrintMulInt1(struct Complex *a, struct Complex *b) {
   printf(") i²");
 }
 
-void PrintMulInt2(struct Complex *a, struct Complex *b) {
+static void PrintMulInt2(struct Complex *a, struct Complex *b) {
   // a * c
   printf("%0.f * ", a->real);
   Print_parenth(b->real);
@@ -201,7 +192,7 @@ void PrintMulInt2(struct Complex *a, struct Complex *b) {
   printf(") i");
 }
 
-void PrintMulInt3(struct Complex *a, struct Complex *b) {
+static void PrintMulInt3(struct Complex *a, struct Complex *b) {
   // a * c
   printf("%0.f ", a->real* b->real);
   // - (b * d)
