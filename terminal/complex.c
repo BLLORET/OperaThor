@@ -283,25 +283,6 @@ int main(int argc, char const *argv[])
   struct Complex *a = malloc(sizeof(struct Complex));
   a->real = 5;
   a->img = 3;
-  /*struct Complex *b = conjugue(a);
-  Print_Complex(a);
-  printf("\n");
-  Print_Complex(b);
-  printf("\n");
-  struct Complex *res = add_comp(a, b);
-  Print_Complex(res);
-  printf("\n");
-  free(res);
-  res = mult_comp(a, b);
-  Print_Complex(res);
-  printf("\n");
-  free(res);
-  res = div_comp(a, b);
-  Print_Complex(res);
-  printf("\n");
-  free(a);
-  free(b);
-  free(res);*/
   struct Complex *b = malloc(sizeof(struct Complex));
   b->real = 7;
   b->img = -5;
