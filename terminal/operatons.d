@@ -1,1 +1,0 @@
-operatons.o: operatons.c

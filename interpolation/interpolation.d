@@ -1,1 +1,0 @@
-interpolation.o: interpolation.c
