@@ -343,14 +343,14 @@ static void PrintSyst3inco(FILE *file,float M[]) {
     fprintf(file, "|%.0fX", M[0]);
   Printpositivity(file, M[1]);
   fprintf(file, "Y");
-  Printpositivity(M[2]);
+  Printpositivity(file,M[2]);
   fprintf(file, "Z = %.0f\n", M[3]);
   // 2e ligne
   if (M[4] != 0) {
     fprintf(file, "|%.0fX", M[4]);
-    Printpositivity(M[5]);
+    Printpositivity(file,M[5]);
     fprintf(file, "Y");
-    Printpositivity(M[6]);
+    Printpositivity(file,M[6]);
     fprintf(file, "Z = %.0f\n", M[7]);
   } else {
     if (M[5] != 0) {
@@ -377,7 +377,7 @@ static void PrintSyst3inco(FILE *file,float M[]) {
   }
 }
 
-static void PrintSyst3incoF(FILE *filefloat M[]) {
+static void PrintSyst3incoF(FILE *file,float M[]) {
   if (M[0] == 1)
     fprintf(file, "| X");
   else

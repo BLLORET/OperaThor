@@ -1,0 +1,68 @@
+Nous avons le système linéaire de la forme:
+
+|3X +  Y + 4Z = 2
+|2X + 5Y + 4Z = 3
+|-0X + 0Y - 0Z = -60446
+
+
+En appliquant le théorème de Gauss, nous obtenons:
+
+|3X +  Y + 4Z = 2
+|   13Y + 4Z = 3      (3L2 - 2L1)
+|   0Y + 0Z = -181338      (3L2 + 0L1)
+
+Nous réappliquons le théorème de Gauss entre la seconde et
+la troisième ligne afin d'isoler le Z de la troisième.
+
+|3X +  Y + 4Z = 2
+|   13Y + 4Z = 3
+|     0Z = -2357389      (13L2 - 0L1)
+
+Maintenant, il ne reste plus qu'à obtenir la valeur de Z.
+
+|3X +  Y + 4Z = 2
+|   13Y + 4Z = 3
+|           Z = -9257940519223296,00
+Et remplacer le Z par sa valeur dans la deuxième ligne.
+Nous obtenons ainsi: 
+
+|3X + Y + 4 * (-9257940519223296,00) = 2
+|   13Y + 4 * (-9257940519223296,00) = 3
+|                   Z = -9257940519223296,00
+
+ Après calcul le système devient:
+
+|3X + Y - 37031762076893184,00 = 2
+|   13Y - 37031762076893184,00 = 3
+|             Z = -9257940519223296,00
+
+|3X + Y   = 37031762076893184,00
+|   13Y   = 37031762076893184,00
+|         Z = -9257940519223296,00
+
+Isolons maintenant le Y et réinjectons le comme pour le Z.
+
+|3X + Y   = 37031762076893184,00
+|      Y   = 2848597062189056,00
+|        Z = -9257940519223296,00
+
+Réinjectons le Y dans la première ligne:
+
+|3X +  * (2848597062189056,00)   = 37031762076893184,00
+|               Y   = 2848597062189056,00
+|                 Z = -9257940519223296,00
+
+|3X 2848597062189056,00 = 37031762076893184,00
+|     Y   = 2848597062189056,00
+|       Z = -9257940519223296,00
+
+|3X = 34183165820010496,00
+| Y = 2848597062189056,00
+| Z = -9257940519223296,00
+
+| X = 11394388248756224,00
+| Y = 2848597062189056,00
+| Z = -9257940519223296,00
+
+Nous avons donc nos solutions pour nos trois inconnus.
+

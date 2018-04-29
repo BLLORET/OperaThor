@@ -132,6 +132,8 @@ static GtkWidget *fenetre_interpolationPoly2 = NULL;
 static GtkWidget *fenetre_interpolationPoly3= NULL;
 static GtkWidget *fenetre_interpolationPoly4 = NULL;
 static GtkWidget *fenetre_polynom = NULL;
+static GtkWidget *fenetre_calculatrice = NULL;
+static GtkWidget *fenetre_complex = NULL;
 
 
 /*char* cmd[]={"rm","équation.txt",NULL};
@@ -167,6 +169,12 @@ G_MODULE_EXPORT void on_Systeme_clicked(){
 			fenetre_system = GTK_WIDGET(gtk_builder_get_object(data.builder,"System"));
 			 gtk_widget_show_all (fenetre_system);
 			 gtk_window_set_title(GTK_WINDOW(fenetre_system),"linear system");
+}
+G_MODULE_EXPORT void on_complex_clicked()
+{
+	fenetre_complex = GTK_WIDGET(gtk_builder_get_object(data.builder,"Complex"));
+			 gtk_widget_show_all (fenetre_complex);
+			 gtk_window_set_title(GTK_WINDOW(fenetre_complex),"Complex");
 }
 
 //EQUATION
@@ -732,20 +740,23 @@ G_MODULE_EXPORT void on_treat2_clicked()
 	C2 =  gtk_entry_get_text(c2);
 	Z1 =  gtk_entry_get_text(z1);
 	Z2 =  gtk_entry_get_text(z2);
-	int prems[4]={atoi(X1),atoi(Y1),atoi(Z1),atoi(C1)};
-	int deuz[4] ={atoi(X2),atoi(Y2),atoi(Z2),atoi(C2)};
+	float inco[1 * 4 + 4];
+	inco[0 * 4 + 0] = atof(X1); // 0
+	inco[0 * 4 + 1] = atof(Y1);  // 1
+	inco[0 * 4 + 2] = atof(C1);  // 2
+	inco[1 * 4 + 0] = atof(X2);  // 3
+	inco[1 * 4 + 1] = atof(Y2);  // 4
+	inco[1 * 4 + 2] = atof(C2);  // 5
+	inco[0 * 4 + 3] = atof(Z1);  // 6
+	inco[1 * 4 + 3] = atof(Z2);  // 7
+	//float M[8]={atof(X1),atof(Y1),atof(Z1),atof(C1),atof(X2),atof(Y2),atof(Z2),atof(C2)};
 	FILE *file= fopen("systeme.txt","w");
 	if(file !=NULL)
 	{
-		for(int i =0;i <4;i++){
-			fprintf(file," Les éléments de la premiere équation sont : %d ",prems[i]);
-			fprintf(file, "\n");
-			fprintf(file, "Les éléments de la seconde équation sont : %d",deuz[i]);
-		}
+		solveur_3_inconnu(file,inco);
 		fclose(file);
 	}
-	GtkLabel *texte_systeme3 = GTK_LABEL(
-			gtk_builder_get_object(data.builder, "solver"));
+	GtkLabel *texte_systeme3 = GTK_LABEL(gtk_builder_get_object(data.builder, "solver"));
 	if(NULL == texte_systeme3)
 	{
 		fprintf(stderr,"label do not exist");
@@ -794,7 +805,12 @@ G_MODULE_EXPORT void on_treatment_system_clicked()
 	}
 }
 
+// COMPLEX
 
+G_MODULE_EXPORT void on_out_clicked()
+{
+	gtk_widget_destroy(fenetre_complex);
+}
 int main(int argc, char *argv []){
 	GtkWidget *fenetre_principale = NULL;
 	GError *error = NULL;
