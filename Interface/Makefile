@@ -7,7 +7,7 @@ CFLAGS= -Wall -Wextra -Werror -std=c99 -O3
 LDFLAGS=
 LDLIBS= `pkg-config --libs gtk+-3.0` -lm -export-dynamic -rdynamic
  
-OBJ= main.o matrice.o troisieme_interface.o identification.o fonction_interface.o PrintMain.o syst.o
+OBJ= main.o matrice.o troisieme_interface.o identification.o fonction_interface.o PrintMain.o syst.o interpolation.o interpolation_lineaire.o interpolation_newton.o
 DEP= ${OBJ:.o=.d}
  
 all: main

@@ -205,6 +205,15 @@ int* dev3(int deg2[] , int deg1[],int p[]) {
   //printf("p[0] = %d = %d* %d\n",p[0],deg2[0],deg1[0]);
   return p;
 }
+int* dev4(int deg3[],int deg1[],int p[])
+{
+	p[4]=deg1[1]*deg3[3];
+	p[3]=deg1[1]*deg3[2]+deg1[0]*deg3[3];
+	p[2]=deg1[1]*deg3[1]+deg1[0]*deg3[2];
+	p[1]=deg1[1]*deg3[0]+deg1[0]*deg3[1];
+	p[0]= deg1[0]*deg3[0];
+	return p;
+}
 int FindDegreeF(float* tab) {
   int degree = 4;
   while(tab[degree] == 0 && degree > 0)
@@ -816,7 +825,7 @@ void interpolation_polynomiale_3(int x[], int fx[], int degre)
 	FreeCoeff(PARTIE4);
 	FreeCoeffF(cf);
 }
-/*void interpolation_polynomiale_4(int x[], int fx[], int degre)
+void interpolation_polynomiale_4(int x[], int fx[], int degre)
 {
 	struct Coeff* cf= malloc(sizeof(struct Coeff));
 	cf->left = calloc(5,sizeof(float));
@@ -865,12 +874,12 @@ void interpolation_polynomiale_3(int x[], int fx[], int degre)
 	printf("Rappelons que le polynôme de Lagrange basé sur les points d’appui d’abscisses x0,x1, . . . ,xn est de degré n et s’écrit :\n");
 	printf("\n");
 	printf(" 					P(n)(x)= S(k=0->n)f(xk)*L(k)(x), avec L(k)(x) = Pr(j=0,j!=k->n)(x-xj)/(xk-xj)\n\n");
-	printf("1. Ici on remarque que le degré qu'aura notre polynôme est 3 donc n = 3\n");
-	printf("	\n 			 		P3(x)= S(k=0->3)f(xk)*L(k)(x)\n\n");
-	printf("2. On calcule les L(k)(x) de 0 à 3 \n\n");
+	printf("1. Ici on remarque que le degré qu'aura notre polynôme est 4 donc n = 4\n");
+	printf("	\n 			 		P3(x)= S(k=0->4)f(xk)*L(k)(x)\n\n");
+	printf("2. On calcule les L(k)(x) de 0 à 4 \n\n");
 	for(int i=0; i< size; i++)
 		{
-			PrintL(x,size,i);
+			PrintL(size,i);
 			printf("\n");
 			L(x,size,i);
 			printf("\n");
@@ -908,131 +917,135 @@ void interpolation_polynomiale_3(int x[], int fx[], int degre)
 		int p1[2];
 		int p2[2];
 		int p3[2];
+		int p4[2];
 		int poly2[3];
- 		int poly3[4];
+ 	  int poly3[4];
+	  int poly4[5];
 		int len=j/3;
 		//INSERE LES NB DANS LES POLY SIMPLES CORRESPONDANT
 		REMPLIR(0,len-1,0,NUMBER,p1);
-		//PRINT_PART(p1,2,1);
+		PRINT_PART(p1,2,1);
 		REMPLIR(0,3,2,NUMBER,p2);
-		//PRINT_PART(p2,2,2);
+		PRINT_PART(p2,2,2);
 		REMPLIR(0,5,4,NUMBER,p3);
-		//PRINT_PART(p3,2,3);
+		PRINT_PART(p3,2,3);
+		REMPLIR(0,7,6,NUMBER,p4);
+		PRINT_PART(p4,2,4);
 		dev2(p1,p2,poly2);
-		//PRINT_PART(poly2,3,12);
+		PRINT_PART(poly2,3,12);
 		dev3(poly2,p3,poly3);
 		//PRINT_PART(poly3,4,13);
+		dev4(poly3,p4,poly4);
+		//PRINT_PART(poly3,4,14);
 		REMETA0(p1,2);
 		REMETA0(p2,2);
 		REMETA0(p3,2);
 		REMETA0(poly2,3);
+		REMETA0(poly3,4);
 
 		for(int i =0; i <size;i++)
 		{
-			polyfinal[dex] = poly3[i];
+			polyfinal[dex] = poly4[i];
 			dex++;
 		}
 		//REMETA0(poly3,4);
 	}
-	float PolyF[4];
-	int polypartie1[4];
-	int polypartie2[4];
-	int polypartie3[4];
-	int polypartie4[4];
-	float partie1[4];
-	float partie2[4];
-	float partie3[4];
-	float partie4[4];
-	REMPLIRbis(0,4,polyfinal,polypartie1);
-	REMPLISTRUCT(4,PARTIE1,polypartie1);
-	PARTIE1->left[0] = polypartie1[0];
-	PARTIE1->left[1] = polypartie1[1];
-	PARTIE1->left[2] = polypartie1[2];
-	PARTIE1->left[3] = polypartie1[3];
-	//REMETA0(polypartie1,4);
-	//PRINT_PART(PARTIE1->left,4);
-
+	float PolyF[5];
+	int polypartie1[5];
+	int polypartie2[5];
+	int polypartie3[5];
+	int polypartie4[5];
+	int polypartie5[5];
+	float partie1[5];
+	float partie2[5];
+	float partie3[5];
+	float partie4[5];
+	float partie5[5];
+	
+	REMPLIRbis(0,5,polyfinal,polypartie1);
+	REMPLISTRUCT(5,PARTIE1,polypartie1);
+	//PRINT_PART(PARTIE1->left,5);
 	printCoeffs(PARTIE1,1);
 
-	REMPLIRbis(4,8,polyfinal,polypartie2);
-
-	PARTIE2->left[0] = polypartie2[0];
-	PARTIE2->left[1] = polypartie2[1];
-	PARTIE2->left[2] = polypartie2[2];
-	PARTIE2->left[3] = polypartie2[3];
-	//REMETA0(polypartie2,4);
-	//PRINT_PART(PARTIE2->left,4,2);
+	REMPLIRbis(5,10,polyfinal,polypartie2);
+	REMPLISTRUCT(5,PARTIE2,polypartie2);
+	//PRINT_PART(PARTIE2->left,5);
 	printCoeffs(PARTIE2,2);
 
-	REMPLIRbis(8,12,polyfinal,polypartie3);
-	PARTIE3->left[0] = polypartie3[0];
-	PARTIE3->left[1] = polypartie3[1];
-	PARTIE3->left[2] = polypartie3[2];
-	PARTIE3->left[3] = polypartie3[3];
-	//REMETA0(polypartie3,4);
-	//PRINT_PART(PARTIE3->left,4);
+	REMPLIRbis(10,15,polyfinal,polypartie3);
+	REMPLISTRUCT(5,PARTIE3,polypartie3);
+	//PRINT_PART(PARTIE3->left,5);
 	printCoeffs(PARTIE3,3);
 
 
-	REMPLIRbis(12,16,polyfinal,polypartie4);
-	PARTIE4->left[0] = polypartie4[0];
-	PARTIE4->left[1] = polypartie4[1];
-	PARTIE4->left[2] = polypartie4[2];
-	PARTIE4->left[3] = polypartie4[3];
-	//REMETA0(polypartie4,4);
-	//PRINT_PART(PARTIE4->left,4);
+	REMPLIRbis(15,20,polyfinal,polypartie4);
+	REMPLISTRUCT(5,PARTIE4,polypartie4);
+	
+	//PRINT_PART(PARTIE4->left,5);
 	printCoeffs(PARTIE4,4);
-
-	MULTIPLIER(4,PRODUIT[0],polypartie1,partie1);
-	MULTIPLIER(4,PRODUIT[1],polypartie2,partie2);
-	MULTIPLIER(4,PRODUIT[2],polypartie3,partie3);
-	MULTIPLIER(4,PRODUIT[3],polypartie4,partie4);
-	for(int i=0; i <4;i++){
-		PolyF[i] = partie1[i]+partie2[i]+partie3[i]+partie4[i];
+	
+	REMPLIRbis(20,25,polyfinal,polypartie5);
+	REMPLISTRUCT(5,PARTIE5,polypartie5);
+	
+	//PRINT_PART(PARTIE5->left,5);
+	printCoeffs(PARTIE5,5);
+	
+	
+	MULTIPLIER(5,PRODUIT[0],polypartie1,partie1);
+	MULTIPLIER(5,PRODUIT[1],polypartie2,partie2);
+	MULTIPLIER(5,PRODUIT[2],polypartie3,partie3);
+	MULTIPLIER(5,PRODUIT[3],polypartie4,partie4);
+	MULTIPLIER(5,PRODUIT[4],polypartie5,partie5);
+	for(int i=0; i <5;i++){
+		PolyF[i] = partie1[i]+partie2[i]+partie3[i]+partie4[i]+partie5[i];
 		//printf("PolyF[i] = partie1[i]+partie2[i]+partie3[i]+partie4[i] \n");
 		//printf(" = %.2f = %.2f +%.2f+%.2f+%.2f\n",PolyF[i],partie1[i],partie2[i],partie3[i],partie4[i]);
 	}
 	printf("3. Ainsi le polynôme de Lagrange s'écrit :\n\n\n");
-	PL(x,4,3,fx);
+	PL(5,4);
 	printf("Ce qui donne :\n\n");
 	printf("		        = ");
-	PrintP(x,PARTIE1,4,P,0,fx);
-	PrintP(x,PARTIE2,4,P,1,fx);
-	PrintP(x,PARTIE3,4,P,2,fx);
-	PrintP(x,PARTIE4,4,P,3,fx);
+	PrintP(PARTIE1,P,0,fx);
+	PrintP(PARTIE2,P,1,fx);
+	PrintP(PARTIE3,P,2,fx);
+	PrintP(PARTIE4,P,3,fx);
+	PrintP(PARTIE5,P,4,fx);
 	printf("\n");
 	cf->left[0] = PolyF[0];
 	cf->left[1] = PolyF[1];
 	cf->left[2] = PolyF[2];
-	cf->left[3] = PolyF[3];
+	cf->left[3] = PolyF[3];	
+	cf->left[4] = PolyF[4];
 	printf("		        = ");
 	printCoeffsF(cf);
 	printf("\n");
 	printf("Ainsi le polynôme qui passe par les points suivants : \n");
 	printf("\n 				x : ");
-	for(int i=0; i<4; i++){
+	for(int i=0; i<5; i++){
 		printf("%d,",x[i]);
 	}
 	printf("\n\n");
 	printf("			     f(x) : " );
-	for(int i=0;i<4;i++){
+	for(int i=0;i<5;i++){
 		printf("%d,",fx[i]);
 	}
 	printf("\n");
 	printf("\n");
 	printf("Est : \n");
-	printCoeffsFinal(cf,3);
+	printCoeffsFinal(cf,4);
 	printf("\n");
 	 	FreeCoeff(PARTIE1);
 	FreeCoeff(PARTIE2);
 	FreeCoeff(PARTIE3);
 	FreeCoeff(PARTIE4);
+	FreeCoeff(PARTIE5);
 	FreeCoeffF(cf);
-}*/
+}
 int main(int argc, char** argv)
 { 
 	
-	if(argc <2){
+	if(argc <2)
+	{
 		printf("Veuillez écrire l'interpolation que vous voulez : \n");
 		printf("		=> linéaire\n 		=> polynomiale\n");
 		return 0;
@@ -1045,64 +1058,94 @@ int main(int argc, char** argv)
 		int res2;
 		printf("Entrez 2 valeurs de x en les espaçant: ");
 		res = scanf("%d %d",&x[0],&x[1]);
-		if (res < 2){
+		if (res < 2)
+		{
   			printf("Il manques des valeurs\n");
   			return 0;
-  		}
+  	}
 		printf("Entrez 2 valeurs de f(x) en les espaçant: ");
 		res2 = scanf("%d %d",&fx[0],&fx[1]);
-  		if (res2 < 2){
+  		if (res2 < 2)
+  		{
   			printf("Il manques des valeurs\n");
   			return 0;
   		}
   		interpole_lineaire(x,fx);
-  	}
+}
   	else if(strcmp(argv[1],"polynomiale")==0)
   	{
   		int reponse;
   		int degre;
   		printf("Entrez le degré de votre équation final svp : ");	
   		reponse = scanf("%d",&degre);
-  		if(reponse == 1 && degre == 2){
+  		if(reponse == 1 && degre == 2)
+  		{
   			int x[3];
 			int res;
 			int fx[3];
 			int res2;
 			printf("Entrez 3 valeurs de x en les espaçant: ");
 			res = scanf("%d %d %d",&x[0],&x[1],&x[2]);
-			if (res < 3){
+			if (res < 3)
+			{
   				printf("Il manques des valeurs\n");
   				return 0;
   			}
 			printf("Entrez 3 valeurs de f(x) en les espaçant: ");
 			res2 = scanf("%d %d %d",&fx[0],&fx[1],&fx[2]);
 			
-  			if (res2 < 3){
+  			if (res2 < 3)
+  			{
   				printf("Il manques des valeurs\n");
   				return 0;
   			}
   			interpolation_polynomiale_2(x,fx,degre);
   		}
-  		else if(reponse ==1 && degre == 3){
+  		else if(reponse ==1 && degre == 3)
+  		{
   			int x[4];
 			int res;
 			int fx[4];
 			int res2;
 			printf("Entrez 4 valeurs de x en les espaçant: ");
 			res = scanf("%d %d %d %d",&x[0],&x[1],&x[2],&x[3]);
-			if (res < 4){
+			if (res < 4)
+			{
   				printf("Il manques des valeurs\n");
   				return 0;
   			}
 			printf("Entrez 4 valeurs de f(x) en les espaçant: ");
 			res2 = scanf("%d %d %d %d",&fx[0],&fx[1],&fx[2],&fx[3]);
 		
-  			if (res2 < 4){
+  			if (res2 < 4)
+  			{
   				printf("Il manques des valeurs\n");
   				return 0;
   			}
   			interpolation_polynomiale_3(x,fx,degre);
-  		}
   	}
- 
+		else if(reponse ==1 && degre ==4)
+		{
+  		int x[5];
+			int res;
+			int fx[5];
+			int res2;
+			printf("Entrez 5 valeurs de x en les espaçant: ");
+			res = scanf("%d %d %d %d %d",&x[0],&x[1],&x[2],&x[3],&x[4]);
+			if (res < 5)
+			{
+  				printf("Il manques des valeurs\n");
+  				return 0;
+  			}
+			printf("Entrez 5 valeurs de f(x) en les espaçant: ");
+			res2 = scanf("%d %d %d %d %d",&fx[0],&fx[1],&fx[2],&fx[3],&fx[4]);
+		
+  			if (res2 < 5)
+  			{
+  				printf("Il manques des valeurs\n");
+  				return 0;
+  			}
+  			interpolation_polynomiale_4(x,fx,degre);
+  		}
+ }
 }

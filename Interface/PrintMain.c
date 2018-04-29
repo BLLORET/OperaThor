@@ -1,5 +1,4 @@
 #include "PrintMain.h"
-
 void Printmain(FILE* file,struct coeff *cf, int degre)
 {
 if(degre > 5) {
@@ -45,5 +44,21 @@ if(degre > 5) {
 		Print_degre_trois(file,b1,c1,d1);
 		
 	}
+   /*if(degre == 4)
+	{
+		fprintf(file,"Pour résoudre une équation de degré 4 voici les étapes:\n");
+		int a1 = cf->left[4];
+		int b1 = cf->left[3];
+		int c1 = cf->left[2];
+		int d1 = cf->left[1];
+		int e1 = cf->left[0];
+		int a2 = cf->right[4];
+		int b2 = cf->right[3];
+		int c2 = cf->right[2];
+		int d2 = cf->right[1];
+		int e2 = cf->right[4];
+		quat((float) a1, (float) b1, (float) c1, float d1, float e1 ,float a2, float b2, float c2, float d2, float e2)
+{
+	}*/
 
 }

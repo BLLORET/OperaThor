@@ -16,8 +16,8 @@ int FindDegree(int *tab);
 
 int FindNumber(char *str, char *nb);
 
-//struct coeff *PutExpression(char *str);
+//void Printpositivity(FILE* file,int n);
 
-//void printcoeff(struct coeff *cf);
+//void printdegree(FILE* file,int n);
 
 void FreeCoeff(struct coeff *cf);

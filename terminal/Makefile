@@ -5,7 +5,7 @@ CFLAGS= -Wall  -Wextra -std=c99 -O2 -g
 LDFLAGS=
 LDLIBS= -lm
 
-OBJ= troisieme_terminal.o identification.o fonction_terminal.o operathor_terminal.o
+OBJ= troisieme_terminal.o  identification.o fonction_terminal.o operathor_terminal.o
 DEP= ${OBJ:.o=.d}
 
 all: operathor_terminal

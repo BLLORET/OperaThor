@@ -9,6 +9,12 @@
 #include "matrice.h"
 #include "PrintMain.h"
 #include "syst.h"
+#include "interpolation.h"
+#include "interpole.h"
+#include "interpolation_newton.h"
+
+
+//#include "quatrieme_interface.h"
 
 typedef struct
 {
@@ -18,6 +24,9 @@ typedef struct
 
 #define taille_max 1000 
 static SGlobalData data;  
+
+//EQUATION
+
 static const gchar *X4cste =NULL;
 static const gchar *X3cste= NULL;
 static const gchar *X2cste= NULL;
@@ -28,6 +37,34 @@ static const gchar *DX3cste= NULL;
 static const gchar *DX2cste= NULL;
 static const gchar *DXcste= NULL;
 static const gchar *Dcste= NULL;
+
+//INTEPOLATION LAGRANGE
+
+		//LINEAIRE
+
+static const gchar *lineairex1 =NULL;
+static const gchar *lineairex2=NULL;
+static const gchar *lineairey1=NULL;
+static const gchar *lineairey2=NULL;
+		
+		//RECUP DEGRE
+
+static const gchar *degre = NULL;
+
+		//POLYNOMIALE DEGRE 
+		static const gchar *un =NULL;
+		static const gchar *deux=NULL;
+		static const gchar *trois =NULL;
+		static const gchar *quatre =NULL;
+		static const gchar *cinq=NULL;
+		static const gchar *unf =NULL;
+		static const gchar *deuf =NULL;
+		static const gchar *troif =NULL;
+		static const gchar *quatref =NULL;
+		static const gchar *cinqf=NULL;
+
+//Matrice
+
 static const gchar *Ma11 =NULL;
 static const gchar *Ma12 =NULL;
 static const gchar *Ma13 =NULL;
@@ -47,7 +84,7 @@ static const gchar *Mb31 =NULL;
 static const gchar *Mb32 =NULL;
 static const gchar *Mb33 =NULL;
 
-
+//SYSTEM
 
 static const gchar *X1 =NULL;
 static const gchar *X2 =NULL;
@@ -55,6 +92,8 @@ static const gchar *Y1 =NULL;
 static const gchar *Y2 =NULL;
 static const gchar *C1 =NULL;
 static const gchar *C2 =NULL;
+static const gchar *Z1 =NULL;
+static const gchar *Z2 =NULL;
 
 static const gchar* choice =NULL;
 static int MatriceA[]= {
@@ -76,33 +115,127 @@ static int MatriceB[]= {
 static gchar *contents =NULL;
 static gchar *contents_matrice =NULL;
 static gchar *contents_syst =NULL;
+static GtkEntry *Degre =NULL;
 //static gchar *error =NULL;
 static gchar *name_of_file_equation="équation.txt";
 static gchar *name_of_file_system="systeme.txt";
 static gchar *name_of_file="matrice.txt";  
+static gchar *name_of_file_interpolationL ="interpolation_lineaire.txt";
+static gchar *name_of_file_interpolationP ="interpolation_polynomiale.txt";
+static gchar *name_of_file_interpolationN ="interpolation_newton.txt";
 static GtkWidget *fenetre_matrice = NULL;
 static GtkWidget *fenetre_system= NULL;
 static GtkWidget *fenetre_d = NULL;
 static GtkWidget *fenetre_interpolation = NULL;
+static GtkWidget *fenetre_interpolationLP = NULL;
+static GtkWidget *fenetre_interpolationPoly2 = NULL;
+static GtkWidget *fenetre_interpolationPoly3= NULL;
+static GtkWidget *fenetre_interpolationPoly4 = NULL;
+static GtkWidget *fenetre_polynom = NULL;
 
-G_MODULE_EXPORT void on_quit_clicked(){
-char* cmd[]={"rm","équation.txt",NULL};
-	execvp(cmd[0],cmd);
-	gtk_main_quit();
-}
+
+/*char* cmd[]={"rm","équation.txt",NULL};
+	execvp(cmd[0],cmd);*/
+
+//FENETRE PRINCIPALE
+
 G_MODULE_EXPORT void on_MainWindow_clicked(){
 	gtk_main_quit();
 }
 
-G_MODULE_EXPORT void on_quitte_clicked(){
-	gtk_widget_destroy(fenetre_interpolation);
+G_MODULE_EXPORT void on_polynom_clicked(){
+	fenetre_polynom = GTK_WIDGET(gtk_builder_get_object(data.builder,"polynome"));
+ 	gtk_widget_show_all (fenetre_polynom);
+	gtk_window_set_title(GTK_WINDOW(fenetre_polynom),"polynome");
+}
+G_MODULE_EXPORT void on_Interpolation_clicked(){
+			fenetre_interpolation= GTK_WIDGET(gtk_builder_get_object(data.builder,"Interpole"));
+			 gtk_widget_show_all (fenetre_interpolation);
+			 gtk_window_set_title(GTK_WINDOW(fenetre_interpolation),"Interpolation");
 }
 
-G_MODULE_EXPORT void on_Display_text_clicked(){
-		fenetre_d = GTK_WIDGET(gtk_builder_get_object(data.builder,"display"));
-			 gtk_widget_show_all (fenetre_d);
-			 gtk_window_set_title(GTK_WINDOW(fenetre_d),"Résolution de l'équation");
-			 gtk_window_set_default_size(GTK_WINDOW(fenetre_d),100,2000);
+G_MODULE_EXPORT void on_Matrice_clicked(){
+			fenetre_matrice = GTK_WIDGET(gtk_builder_get_object(data.builder,"Matrix"));
+			 gtk_widget_show_all (fenetre_matrice);
+			 gtk_window_set_title(GTK_WINDOW(fenetre_matrice),"Matrix");
+}
+G_MODULE_EXPORT void on_quit_clicked(){
+	gtk_main_quit();
+}
+
+G_MODULE_EXPORT void on_Systeme_clicked(){
+			fenetre_system = GTK_WIDGET(gtk_builder_get_object(data.builder,"System"));
+			 gtk_widget_show_all (fenetre_system);
+			 gtk_window_set_title(GTK_WINDOW(fenetre_system),"linear system");
+}
+
+//EQUATION
+
+G_MODULE_EXPORT void on_Qui_clicked(){		
+	gtk_widget_destroy(fenetre_polynom);
+}
+G_MODULE_EXPORT void on_treatment_equation_clicked(){
+	//GtkLabel *texte = GTK_LABEL(
+	//gtk_builder_get_object(data.builder, "resolution"));
+	
+	GtkEntry *saisie4 = GTK_ENTRY(gtk_builder_get_object(data.builder,"4cste"));
+	GtkEntry *saisie3 = GTK_ENTRY(gtk_builder_get_object(data.builder,"3cste"));
+	GtkEntry *saisie2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"2cste"));
+	GtkEntry *saisie1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"1cste"));
+	GtkEntry *saisie = GTK_ENTRY(gtk_builder_get_object(data.builder,"cste"));
+	GtkEntry *saisieD4 = GTK_ENTRY(gtk_builder_get_object(data.builder,"D4cste"));
+	GtkEntry *saisieD3 = GTK_ENTRY(gtk_builder_get_object(data.builder,"D3cste"));
+	GtkEntry *saisieD2= GTK_ENTRY(gtk_builder_get_object(data.builder,"D2cste"));
+	GtkEntry *saisieD1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"D1cste"));
+	GtkEntry *saisieD = GTK_ENTRY(gtk_builder_get_object(data.builder,"Dcste"));
+	
+  	X4cste =  gtk_entry_get_text(saisie4);
+	X3cste =  gtk_entry_get_text(saisie3);
+	X2cste =  gtk_entry_get_text(saisie2);
+	Xcste =  gtk_entry_get_text(saisie1);
+	cste =  gtk_entry_get_text(saisie);
+	DX4cste = gtk_entry_get_text(saisieD4);
+	DX3cste = gtk_entry_get_text(saisieD3);
+	DX2cste =  gtk_entry_get_text(saisieD2);
+	DXcste =  gtk_entry_get_text(saisieD1);
+	Dcste = gtk_entry_get_text(saisieD);
+	/*if(NULL == texte)
+	{
+		fprintf(stderr,"label do not exist");
+	}*/
+	if(X3cste==NULL||X2cste==NULL||Xcste==NULL||cste==NULL)
+	{
+		fprintf(stderr,"NULL");
+	}
+	if(DX3cste==NULL||DX2cste==NULL||DXcste==NULL||Dcste==NULL)
+	{
+		fprintf(stderr,"NULL");
+	}
+	struct coeff *cf = malloc(sizeof(struct coeff));
+  	cf->left = calloc(5, sizeof(int));
+  	cf->right = calloc(5, sizeof(int));
+	cf->left[0]= atoi(cste);
+	cf->left[1]= atoi(Xcste);
+	cf->left[2] =atoi(X2cste);
+	cf->left[3] = atoi(X3cste);
+	cf->left[4] = atoi(X4cste);
+	cf->right[0] = atoi(Dcste);
+	cf->right[1] =atoi(DXcste);
+	cf->right[2] = atoi(DX2cste);
+	cf->right[3]= atoi(DX3cste);
+	cf->right[4] = atoi(DX4cste);
+	int degre = FindDegree(cf->left);
+	FILE* file = NULL;
+	file = fopen("équation.txt","w");
+	if(file != NULL){
+  	Printmain(file,cf,degre);
+      	fclose(file);
+	}
+  FreeCoeff(cf);
+	fenetre_d = GTK_WIDGET(gtk_builder_get_object(data.builder,"display"));
+	gtk_widget_show_all (fenetre_d);
+	gtk_window_set_title(GTK_WINDOW(fenetre_d),"Résolution de l'équation");
+	gtk_window_set_default_size(GTK_WINDOW(fenetre_d),100,2000);
 	GtkLabel *texte_equation = GTK_LABEL(
 			gtk_builder_get_object(data.builder, "resolution"));
 	if(NULL == texte_equation)
@@ -114,14 +247,377 @@ G_MODULE_EXPORT void on_Display_text_clicked(){
 		gtk_label_set_text(texte_equation,contents);
 	}
 }
-G_MODULE_EXPORT void on_quitt_clicked(){
-		
-gtk_widget_destroy(fenetre_d);
 
+//INTERPOLATION LAGRANGE ET NEWTON
+
+G_MODULE_EXPORT void on_quitte_clicked(){
+	gtk_widget_destroy(fenetre_interpolation);
 }
+
+G_MODULE_EXPORT void on_treatment_interpole_clicked()
+{
+		fenetre_interpolationLP = GTK_WIDGET(gtk_builder_get_object(data.builder,"interpoleLP"));
+		gtk_widget_show_all (fenetre_interpolationLP);
+	    gtk_window_set_title(GTK_WINDOW(fenetre_interpolationLP),"Lagrange_&_Newton_Interpolation");	 
+}
+G_MODULE_EXPORT void on_treatment_interpole_linear_clicked()
+{
+	GtkEntry *X1l = GTK_ENTRY(gtk_builder_get_object(data.builder,"x1cst"));
+	GtkEntry *X2l = GTK_ENTRY(gtk_builder_get_object(data.builder,"x2cst"));
+	GtkEntry *Y1l = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx1cste"));
+	GtkEntry *Y2l = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx2cste"));
+	lineairex1 =gtk_entry_get_text(X1l);
+ 	lineairex2 =gtk_entry_get_text(X2l);
+	lineairey1 =gtk_entry_get_text(Y1l);
+	lineairey2 =gtk_entry_get_text(Y2l);
+	int x[2];
+	int fx[2];
+	x[0] = atoi(lineairex1);
+	x[1] =atoi(lineairex2);
+	fx[0] =atoi(lineairey1);
+	fx[1]=atoi(lineairey2);
+	FILE *file = fopen("interpolation_lineaire.txt","w");
+	if(file !=NULL){
+		interpole_lineaire(file,x,fx);
+		fclose(file);
+	}
+	fenetre_d = GTK_WIDGET(gtk_builder_get_object(data.builder,"display"));
+	gtk_widget_show_all (fenetre_d);
+	gtk_window_set_title(GTK_WINDOW(fenetre_d),"Résolution interpolation linéaire");
+	gtk_window_set_default_size(GTK_WINDOW(fenetre_d),100,2000);
+	GtkLabel *texte_interpolationl= GTK_LABEL(
+			gtk_builder_get_object(data.builder, "resolution"));
+	if(NULL == texte_interpolationl)
+	{
+		fprintf(stderr,"label do not exist");
+	}
+	if(g_file_get_contents(name_of_file_interpolationL,&contents,NULL,NULL))
+	{
+		gtk_label_set_text(texte_interpolationl,contents);
+	}
+}
+G_MODULE_EXPORT void on_treatment_interpole_poly_clicked()
+{
+		
+		Degre = GTK_ENTRY(gtk_builder_get_object(data.builder,"degree"));
+		degre = gtk_entry_get_text(Degre);
+		int d = atoi(degre);
+		if(d==2){
+			fenetre_interpolationPoly2 = GTK_WIDGET(gtk_builder_get_object(data.builder,"interpoleP2"));
+			gtk_widget_show_all (fenetre_interpolationPoly2);
+			gtk_window_set_title(GTK_WINDOW(fenetre_interpolationPoly2),"Lagrange_polynome2");
+		}
+		else if(d ==3)
+		{
+			fenetre_interpolationPoly3 = GTK_WIDGET(gtk_builder_get_object(data.builder,"interpoleP3"));
+			gtk_widget_show_all (fenetre_interpolationPoly3);
+			gtk_window_set_title(GTK_WINDOW(fenetre_interpolationPoly3),"Lagrange_polynome3");
+		
+		}
+		else if(d == 4)
+		{
+			fenetre_interpolationPoly4 = GTK_WIDGET(gtk_builder_get_object(data.builder,"interpoleP4"));
+			gtk_widget_show_all (fenetre_interpolationPoly4);
+			gtk_window_set_title(GTK_WINDOW(fenetre_interpolationPoly4),"Lagrange_polynome4");	 
+			
+		}
+}
+G_MODULE_EXPORT void on_treatment_poly2_clicked()
+{
+		degre = gtk_entry_get_text(Degre);
+		int d = atoi(degre);
+		FILE *file = fopen("interpolation_polynomiale.txt","w");
+			GtkEntry *X1p1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x1"));
+			GtkEntry *X2p1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x2"));
+			GtkEntry *X3p1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x3"));
+			GtkEntry *Y1p1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx1"));
+			GtkEntry *Y2p1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx2"));
+			GtkEntry *Y3p1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx3"));
+			un =gtk_entry_get_text(X1p1);
+			deux =gtk_entry_get_text(X2p1);
+			trois =gtk_entry_get_text(X3p1);
+			unf =gtk_entry_get_text(Y1p1);
+			deuf=gtk_entry_get_text(Y2p1);
+			troif =gtk_entry_get_text(Y3p1);
+			int x[3] ={atoi(un),atoi(deux),atoi(trois)};
+			int fx[3] ={atoi(unf),atoi(deuf),atoi(troif)};
+			if(file !=NULL){
+				interpolation_polynomiale_2(file,x,fx,d);
+				fclose(file);
+			}
+			GtkLabel *texte_interpolationp1= GTK_LABEL(
+			gtk_builder_get_object(data.builder, "resolution_interpolation"));
+			if(NULL == texte_interpolationp1)
+			{
+				fprintf(stderr,"label do not exist");
+			}
+			if(g_file_get_contents(name_of_file_interpolationP,&contents,NULL,NULL))
+			{
+				gtk_label_set_text(texte_interpolationp1,contents);
+			}
+}
+G_MODULE_EXPORT void on_treatment_poly3_clicked()
+{
+	degre = gtk_entry_get_text(Degre);
+		int d = atoi(degre);
+	FILE *file = fopen("interpolation_polynomiale.txt","w");
+		GtkEntry *X1p = GTK_ENTRY(gtk_builder_get_object(data.builder,"x4"));
+			GtkEntry *X2p = GTK_ENTRY(gtk_builder_get_object(data.builder,"x5"));
+			GtkEntry *X3p = GTK_ENTRY(gtk_builder_get_object(data.builder,"x6"));
+			GtkEntry *X4p = GTK_ENTRY(gtk_builder_get_object(data.builder,"x7"));
+			GtkEntry *Y1p = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx4"));
+			GtkEntry *Y2p = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx5"));
+			GtkEntry *Y3p = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx6"));
+			GtkEntry *Y4p = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx7"));
+			un =gtk_entry_get_text(X1p);
+			deux =gtk_entry_get_text(X2p);
+			trois =gtk_entry_get_text(X3p);
+			quatre =gtk_entry_get_text(X4p);
+			unf =gtk_entry_get_text(Y1p);
+			deuf =gtk_entry_get_text(Y2p);
+			troif =gtk_entry_get_text(Y3p);
+			quatref =gtk_entry_get_text(Y4p);
+			int x[4] ={atoi(un),atoi(deux),atoi(trois),atoi(quatre)};
+			int fx[4]={atoi(unf),atoi(deuf),atoi(troif),atoi(quatref)};
+			
+			if(file !=NULL){
+				interpolation_polynomiale_3(file,x,fx,d);
+				fclose(file);
+			}
+			GtkLabel *texte_interpolationp2= GTK_LABEL(
+			gtk_builder_get_object(data.builder, "resolution_interpolation1"));
+			if(NULL == texte_interpolationp2)
+			{
+				fprintf(stderr,"label do not exist");
+			}
+			if(g_file_get_contents(name_of_file_interpolationP,&contents,NULL,NULL))
+			{
+				gtk_label_set_text(texte_interpolationp2,contents);
+			}
+}
+G_MODULE_EXPORT void on_treatment_poly4_clicked()
+{
+	degre = gtk_entry_get_text(Degre);
+		int d = atoi(degre);
+	FILE *file = fopen("interpolation_polynomiale.txt","w");
+			GtkEntry *X1p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x8"));
+			GtkEntry *X2p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x9"));
+			GtkEntry *X3p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x10"));
+			GtkEntry *X4p2= GTK_ENTRY(gtk_builder_get_object(data.builder,"x11"));
+			GtkEntry *X5p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x12"));
+			GtkEntry *Y1p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx8"));
+			GtkEntry *Y2p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx9"));
+			GtkEntry *Y3p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx10"));
+			GtkEntry *Y4p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx11"));
+			GtkEntry *Y5p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx12"));
+			un =gtk_entry_get_text(X1p2);
+			deux =gtk_entry_get_text(X2p2);
+			trois =gtk_entry_get_text(X3p2);
+			quatre =gtk_entry_get_text(X4p2);
+			cinq=gtk_entry_get_text(X5p2);
+			unf =gtk_entry_get_text(Y1p2);
+			deuf =gtk_entry_get_text(Y2p2);
+			troif =gtk_entry_get_text(Y3p2);
+			quatref =gtk_entry_get_text(Y4p2);
+			cinqf =gtk_entry_get_text(Y5p2);
+			int x[5];
+			x[0]=atoi(un);
+			x[1] = atoi(deux);
+			x[2] =atoi(trois);
+			x[3] = atoi(quatre);
+			x[4] = atoi(cinq);
+			int fx[5];
+			fx[0]= atoi(unf);
+			fx[1]=atoi(deuf);
+			fx[2] = atoi(troif);
+			fx[3]=atoi(quatref);
+			fx[4]=atoi(cinqf);
+			if(file != NULL){
+				interpolation_polynomiale_4(file,x,fx,d);
+				fclose(file);
+			}
+	GtkLabel *texte_interpolationp3= GTK_LABEL(
+			gtk_builder_get_object(data.builder, "resolution_interpolation2"));
+			if(NULL == texte_interpolationp3)
+			{
+				fprintf(stderr,"label do not exist");
+			}
+			if(g_file_get_contents(name_of_file_interpolationP,&contents,NULL,NULL))
+			{
+				gtk_label_set_text(texte_interpolationp3,contents);
+			}	
+}
+G_MODULE_EXPORT void on_treatmentpoly2_clicked()
+{
+	degre = gtk_entry_get_text(Degre);
+		int d = atoi(degre);
+			FILE *file = fopen("interpolation_newton.txt","w");
+			GtkEntry *X1p1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x1"));
+			GtkEntry *X2p1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x2"));
+			GtkEntry *X3p1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x3"));
+			GtkEntry *Y1p1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx1"));
+			GtkEntry *Y2p1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx2"));
+			GtkEntry *Y3p1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx3"));
+			un =gtk_entry_get_text(X1p1);
+			deux =gtk_entry_get_text(X2p1);
+			trois =gtk_entry_get_text(X3p1);
+			unf =gtk_entry_get_text(Y1p1);
+			deuf=gtk_entry_get_text(Y2p1);
+			troif =gtk_entry_get_text(Y3p1);
+			int x[3] ={atoi(un),atoi(deux),atoi(trois)};
+			int fx[3] ={atoi(unf),atoi(deuf),atoi(troif)};
+			if(file != NULL){
+				interpolation_newton(d,file,x,fx);
+				fclose(file);
+			}
+			GtkLabel *texte_interpolationp5= GTK_LABEL(
+			gtk_builder_get_object(data.builder, "resolution_interpolation"));
+			if(NULL == texte_interpolationp5)
+			{
+				fprintf(stderr,"label do not exist");
+			}
+			if(g_file_get_contents(name_of_file_interpolationN,&contents,NULL,NULL))
+			{
+				gtk_label_set_text(texte_interpolationp5,contents);
+			}	
+}
+G_MODULE_EXPORT void on_treatmentpoly3_clicked()
+{
+	degre = gtk_entry_get_text(Degre);
+		int d = atoi(degre);
+	FILE *file = fopen("interpolation_newton.txt","w");
+		GtkEntry *X1p = GTK_ENTRY(gtk_builder_get_object(data.builder,"x4"));
+			GtkEntry *X2p = GTK_ENTRY(gtk_builder_get_object(data.builder,"x5"));
+			GtkEntry *X3p = GTK_ENTRY(gtk_builder_get_object(data.builder,"x6"));
+			GtkEntry *X4p = GTK_ENTRY(gtk_builder_get_object(data.builder,"x7"));
+			GtkEntry *Y1p = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx4"));
+			GtkEntry *Y2p = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx5"));
+			GtkEntry *Y3p = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx6"));
+			GtkEntry *Y4p = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx7"));
+			un =gtk_entry_get_text(X1p);
+			deux =gtk_entry_get_text(X2p);
+			trois =gtk_entry_get_text(X3p);
+			quatre =gtk_entry_get_text(X4p);
+			unf =gtk_entry_get_text(Y1p);
+			deuf =gtk_entry_get_text(Y2p);
+			troif =gtk_entry_get_text(Y3p);
+			quatref =gtk_entry_get_text(Y4p);
+			int x[4] ={atoi(un),atoi(deux),atoi(trois),atoi(quatre)};
+			int fx[4]={atoi(unf),atoi(deuf),atoi(troif),atoi(quatref)};
+			if(file !=NULL){
+				interpolation_newton(d,file,x,fx);
+				fclose(file);
+			}
+			GtkLabel *texte_interpolationp6= GTK_LABEL(
+			gtk_builder_get_object(data.builder, "resolution_interpolation1"));
+			if(NULL == texte_interpolationp6)
+			{
+				fprintf(stderr,"label do not exist");
+			}
+			if(g_file_get_contents(name_of_file_interpolationN,&contents,NULL,NULL))
+			{
+				gtk_label_set_text(texte_interpolationp6,contents);
+			}
+}
+G_MODULE_EXPORT void on_treatmentpoly4_clicked()
+{
+	degre = gtk_entry_get_text(Degre);
+		int d = atoi(degre);
+	FILE *file = fopen("interpolation_newton.txt","w");
+			GtkEntry *X1p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x8"));
+			GtkEntry *X2p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x9"));
+			GtkEntry *X3p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x10"));
+			GtkEntry *X4p2= GTK_ENTRY(gtk_builder_get_object(data.builder,"x11"));
+			GtkEntry *X5p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x12"));
+			GtkEntry *Y1p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx8"));
+			GtkEntry *Y2p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx9"));
+			GtkEntry *Y3p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx10"));
+			GtkEntry *Y4p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx11"));
+			GtkEntry *Y5p2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx12"));
+			un =gtk_entry_get_text(X1p2);
+			deux =gtk_entry_get_text(X2p2);
+			trois =gtk_entry_get_text(X3p2);
+			quatre =gtk_entry_get_text(X4p2);
+			cinq=gtk_entry_get_text(X5p2);
+			unf =gtk_entry_get_text(Y1p2);
+			deuf =gtk_entry_get_text(Y2p2);
+			troif =gtk_entry_get_text(Y3p2);
+			quatref =gtk_entry_get_text(Y4p2);
+			cinqf =gtk_entry_get_text(Y5p2);
+			int x[5];
+			x[0]=atoi(un);
+			x[1] = atoi(deux);
+			x[2] =atoi(trois);
+			x[3] = atoi(quatre);
+			x[4] = atoi(cinq);
+			int fx[5];
+			fx[0]= atoi(unf);
+			fx[1]=atoi(deuf);
+			fx[2] = atoi(troif);
+			fx[3]=atoi(quatref);
+			fx[4]=atoi(cinqf);
+			if(file != NULL){
+				interpolation_newton(d,file,x,fx);
+				fclose(file);
+			}
+		
+	GtkLabel *texte_interpolationp7= GTK_LABEL(
+			gtk_builder_get_object(data.builder, "resolution_interpolation2"));
+			if(NULL == texte_interpolationp7)
+			{
+				fprintf(stderr,"label do not exist");
+			}
+			if(g_file_get_contents(name_of_file_interpolationN,&contents,NULL,NULL))
+			{
+				gtk_label_set_text(texte_interpolationp7,contents);
+			}	
+}
+G_MODULE_EXPORT void on_Sortir_clicked()
+{
+	gtk_widget_destroy(fenetre_interpolationLP);
+}
+G_MODULE_EXPORT void on_Sortie2_clicked()
+{
+	gtk_widget_destroy(fenetre_interpolationPoly4);
+}
+G_MODULE_EXPORT void on_Sortie1_clicked()
+{
+	gtk_widget_destroy(fenetre_interpolationPoly3);
+}
+G_MODULE_EXPORT void on_Sortie_clicked()
+{
+	gtk_widget_destroy(fenetre_interpolationPoly2);
+}
+
+
+
+//DISPLAY
+
+/*G_MODULE_EXPORT void on_Display_text_clicked(){
+	fenetre_d = GTK_WIDGET(gtk_builder_get_object(data.builder,"display"));
+	gtk_widget_show_all (fenetre_d);
+	gtk_window_set_title(GTK_WINDOW(fenetre_d),"Résolution de l'équation");
+	gtk_window_set_default_size(GTK_WINDOW(fenetre_d),100,2000);
+	GtkLabel *texte_equation = GTK_LABEL(
+			gtk_builder_get_object(data.builder, "resolution"));
+	if(NULL == texte_equation)
+	{
+		fprintf(stderr,"label do not exist");
+	}
+	if(g_file_get_contents(name_of_file_equation,&contents,NULL,NULL))
+	{
+		gtk_label_set_text(texte_equation,contents);
+	}
+}*/
+G_MODULE_EXPORT void on_quitt_clicked(){		
+gtk_widget_destroy(fenetre_d);
+}
+
+//MATRICE
+
 G_MODULE_EXPORT void on_Matrice_Display_text_clicked(){
 	GtkLabel *texte_matrice = GTK_LABEL(
-			gtk_builder_get_object(data.builder, "matrice"));
+	gtk_builder_get_object(data.builder, "matrice"));
 	if(NULL == texte_matrice)
 	{
 		fprintf(stderr,"label do not exist");
@@ -136,54 +632,6 @@ void Make_matrix(int Matrice[], int elm[])
 	for(int i =0; i <9;i++)
 	{
 				Matrice[i]=elm[i];
-	}
-}
-G_MODULE_EXPORT void on_treatment_interpole_clicked(){}
-
-G_MODULE_EXPORT void on_Systeme_clicked(){
-			fenetre_system = GTK_WIDGET(gtk_builder_get_object(data.builder,"System"));
-			 gtk_widget_show_all (fenetre_system);
-			 gtk_window_set_title(GTK_WINDOW(fenetre_system),"linear system");
-}
-
-G_MODULE_EXPORT void on_qUIT_clicked(){
-gtk_widget_destroy(fenetre_system);
-}
-G_MODULE_EXPORT void on_treatment_system_clicked()
-{
-	GtkEntry *x1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x1cste"));
-	GtkEntry *x2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x2cste"));
-	GtkEntry *y1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"y1cste"));
-	GtkEntry *y2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"y2cste"));
-	GtkEntry *c1= GTK_ENTRY(gtk_builder_get_object(data.builder,"1cst"));
-	GtkEntry *c2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"2cst"));
-	X1=  gtk_entry_get_text(x1);
-	X2 =  gtk_entry_get_text(x2);
-  Y1 =  gtk_entry_get_text(y1);
-	Y2 =  gtk_entry_get_text(y2);
-	C1 =  gtk_entry_get_text(c1);
-	C2 =  gtk_entry_get_text(c2);
-	//size_t column = 3;
-	float inco[1 * 3 + 3];
-	inco[0 * 3 + 0] = atof(X1); // 0
-	inco[0 * 3 + 1] = atof(Y1);  // 1
-	inco[0 * 3 + 2] = atof(C1);  // 2
-	inco[1 * 3 + 0] = atof(X2);  // 3
-	inco[1 * 3 + 1] = atof(Y2);  // 4
-	inco[1 * 3 + 2] =	atof(C2);  // 5
-	FILE *file =fopen("systeme.txt","w");
-	if(file != NULL){
-	solveur_2_inconnu(file,inco);
-	fclose(file);}
-		GtkLabel *texte_systeme = GTK_LABEL(
-			gtk_builder_get_object(data.builder, "solver"));
-	if(NULL == texte_systeme)
-	{
-		fprintf(stderr,"label do not exist");
-	}
-	if(g_file_get_contents(name_of_file_system,&contents_syst,NULL,NULL))
-	{
-		gtk_label_set_text(texte_systeme,contents_syst);
 	}
 }
 G_MODULE_EXPORT void on_treatment_matrice_clicked(){
@@ -252,82 +700,101 @@ G_MODULE_EXPORT void on_treatment_matrice_clicked(){
   0, 0, 0,
   0, 0, 0,
   0, 0, 0
-};
+		};
 	PMatrix(file,MatriceA,MatriceB,res,(char*)choice);
 	fclose(file);}
 } 
-G_MODULE_EXPORT void on_treatment_equation_clicked(){
-		//GtkLabel *texte = GTK_LABEL(
-	 //gtk_builder_get_object(data.builder, "resolution"));
-	GtkEntry *saisie4 = GTK_ENTRY(gtk_builder_get_object(data.builder,"4cste"));
-	GtkEntry *saisie3 = GTK_ENTRY(gtk_builder_get_object(data.builder,"3cste"));
-	GtkEntry *saisie2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"2cste"));
-	GtkEntry *saisie1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"1cste"));
-	GtkEntry *saisie = GTK_ENTRY(gtk_builder_get_object(data.builder,"cste"));
-	GtkEntry *saisieD4 = GTK_ENTRY(gtk_builder_get_object(data.builder,"D4cste"));
-	GtkEntry *saisieD3 = GTK_ENTRY(gtk_builder_get_object(data.builder,"D3cste"));
-	GtkEntry *saisieD2= GTK_ENTRY(gtk_builder_get_object(data.builder,"D2cste"));
-	GtkEntry *saisieD1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"D1cste"));
-	GtkEntry *saisieD = GTK_ENTRY(gtk_builder_get_object(data.builder,"Dcste"));
-	
-  	X4cste =  gtk_entry_get_text(saisie4);
-	X3cste =  gtk_entry_get_text(saisie3);
-	X2cste =  gtk_entry_get_text(saisie2);
-	Xcste =  gtk_entry_get_text(saisie1);
-	cste =  gtk_entry_get_text(saisie);
-	DX4cste = gtk_entry_get_text(saisieD4);
-	DX3cste = gtk_entry_get_text(saisieD3);
-	DX2cste =  gtk_entry_get_text(saisieD2);
-	DXcste =  gtk_entry_get_text(saisieD1);
-	Dcste = gtk_entry_get_text(saisieD);
-	/*if(NULL == texte)
-	{
-		fprintf(stderr,"label do not exist");
-	}*/
-	if(X3cste==NULL||X2cste==NULL||Xcste==NULL||cste==NULL)
-	{
-		fprintf(stderr,"NULL");
-	}
-	if(DX3cste==NULL||DX2cste==NULL||DXcste==NULL||Dcste==NULL)
-	{
-		fprintf(stderr,"NULL");
-	}
-struct coeff *cf = malloc(sizeof(struct coeff));
-  	cf->left = calloc(5, sizeof(int));
-  	cf->right = calloc(5, sizeof(int));
-	cf->left[0]= atoi(cste);
-	cf->left[1]= atoi(Xcste);
-	cf->left[2] =atoi(X2cste);
-	cf->left[3] = atoi(X3cste);
-	cf->left[4] = atoi(X4cste);
-	cf->right[0] = atoi(Dcste);
-	cf->right[1] =atoi(DXcste);
-	cf->right[2] = atoi(DX2cste);
-	cf->right[3]= atoi(DX3cste);
-	cf->right[4] = atoi(DX4cste);
-	int degre = FindDegree(cf->left);
-	FILE* file = NULL;
-	file = fopen("équation.txt","w");
-	if(file != NULL){
-  	Printmain(file,cf,degre);
-      	fclose(file);
-	}
-  FreeCoeff(cf);
-}
-G_MODULE_EXPORT void on_Interpolation_clicked(){
-			fenetre_interpolation= GTK_WIDGET(gtk_builder_get_object(data.builder,"Interpole"));
-			 gtk_widget_show_all (fenetre_interpolation);
-			 gtk_window_set_title(GTK_WINDOW(fenetre_interpolation),"Interpolation");
+
+G_MODULE_EXPORT void on_Matrice_quit_clicked(){
+	gtk_widget_destroy(fenetre_matrice);
 }
 
-G_MODULE_EXPORT void on_Matrice_clicked(){
-			fenetre_matrice = GTK_WIDGET(gtk_builder_get_object(data.builder,"Matrix"));
-			 gtk_widget_show_all (fenetre_matrice);
-			 gtk_window_set_title(GTK_WINDOW(fenetre_matrice),"Matrix");
+//SYSTEM
+
+G_MODULE_EXPORT void on_qUIT_clicked(){
+	gtk_widget_destroy(fenetre_system);
 }
-G_MODULE_EXPORT void on_Matrice_quit_clicked(){
-			gtk_widget_destroy(fenetre_matrice);
+G_MODULE_EXPORT void on_treat2_clicked()
+{
+	GtkEntry *x1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x13"));
+	GtkEntry *x2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x23"));
+	GtkEntry *y1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"y13"));
+	GtkEntry *y2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"y23"));
+	GtkEntry *c1= GTK_ENTRY(gtk_builder_get_object(data.builder,"3c"));
+	GtkEntry *c2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"23c"));
+	GtkEntry *z1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"z13"));
+	GtkEntry *z2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"z23"));
+	X1 =  gtk_entry_get_text(x1);
+	X2 =  gtk_entry_get_text(x2);
+  	Y1 =  gtk_entry_get_text(y1);
+	Y2 =  gtk_entry_get_text(y2);
+	C1 =  gtk_entry_get_text(c1);
+	C2 =  gtk_entry_get_text(c2);
+	Z1 =  gtk_entry_get_text(z1);
+	Z2 =  gtk_entry_get_text(z2);
+	int prems[4]={atoi(X1),atoi(Y1),atoi(Z1),atoi(C1)};
+	int deuz[4] ={atoi(X2),atoi(Y2),atoi(Z2),atoi(C2)};
+	FILE *file= fopen("systeme.txt","w");
+	if(file !=NULL)
+	{
+		for(int i =0;i <4;i++){
+			fprintf(file," Les éléments de la premiere équation sont : %d ",prems[i]);
+			fprintf(file, "\n");
+			fprintf(file, "Les éléments de la seconde équation sont : %d",deuz[i]);
+		}
+		fclose(file);
+	}
+	GtkLabel *texte_systeme3 = GTK_LABEL(
+			gtk_builder_get_object(data.builder, "solver"));
+	if(NULL == texte_systeme3)
+	{
+		fprintf(stderr,"label do not exist");
+	}
+	if(g_file_get_contents(name_of_file_system,&contents_syst,NULL,NULL))
+	{
+		gtk_label_set_text(texte_systeme3,contents_syst);
+	}
+
 }
+G_MODULE_EXPORT void on_treatment_system_clicked()
+{
+	GtkEntry *x1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x1cste"));
+	GtkEntry *x2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x2cste"));
+	GtkEntry *y1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"y1cste"));
+	GtkEntry *y2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"y2cste"));
+	GtkEntry *c1= GTK_ENTRY(gtk_builder_get_object(data.builder,"1cst"));
+	GtkEntry *c2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"2cst"));
+	X1 =  gtk_entry_get_text(x1);
+	X2 =  gtk_entry_get_text(x2);
+  	Y1 =  gtk_entry_get_text(y1);
+	Y2 =  gtk_entry_get_text(y2);
+	C1 =  gtk_entry_get_text(c1);
+	C2 =  gtk_entry_get_text(c2);
+	//size_t column = 3;
+	float inco[1 * 3 + 3];
+	inco[0 * 3 + 0] = atof(X1); // 0
+	inco[0 * 3 + 1] = atof(Y1);  // 1
+	inco[0 * 3 + 2] = atof(C1);  // 2
+	inco[1 * 3 + 0] = atof(X2);  // 3
+	inco[1 * 3 + 1] = atof(Y2);  // 4
+	inco[1 * 3 + 2] = atof(C2);  // 5
+	FILE *file =fopen("systeme.txt","w");
+	if(file != NULL){
+	solveur_2_inconnu(file,inco);
+	fclose(file);}
+		GtkLabel *texte_systeme = GTK_LABEL(
+			gtk_builder_get_object(data.builder, "solver"));
+	if(NULL == texte_systeme)
+	{
+		fprintf(stderr,"label do not exist");
+	}
+	if(g_file_get_contents(name_of_file_system,&contents_syst,NULL,NULL))
+	{
+		gtk_label_set_text(texte_systeme,contents_syst);
+	}
+}
+
+
 int main(int argc, char *argv []){
 	GtkWidget *fenetre_principale = NULL;
 	GError *error = NULL;

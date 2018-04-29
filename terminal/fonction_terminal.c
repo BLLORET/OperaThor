@@ -88,8 +88,8 @@ void Print_premier_degre(int a, int b, int c)
 {
 	int d,f,res,vres;
 	float sol;
-	printf("1. On passe tout d'un même côté en faisaint attention ");
-	printf("aux signes. Si on a deja  = 0 alors cela ne changera rien\n");
+	//printf("1. On passe tout d'un même côté en faisaint attention ");
+	//printf("aux signes. Si on a deja  = 0 alors cela ne changera rien\n");
 	if(c ==0)
 	{
 			if(b > 0)
@@ -367,7 +367,7 @@ void Print_Second_degre(int a, int b, int c)
 	float x2;
 	//Calcul du Delta
 	int Delta= delta(a,b,c);
-	printf("Pour résoudre une equation de degre 2 voici les etapes:\n");
+	//printf("Pour résoudre une equation de degre 2 voici les etapes:\n");
 	printf("1. On calcul le Delta (note D) :\n");
 	printf("			D = b² - 4 * a * c \n");
 	printf("			avec a = %d, b = %d, c = %d \n",a,b,c);
