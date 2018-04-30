@@ -13,10 +13,10 @@ float Im(struct Complex *a);
 
 float Re(struct Complex *a);
 
-void Addition(struct Complex *a, struct Complex *b);
+void Addition(FILE *file, struct Complex *a, struct Complex *b);
 
-void Soustration(struct Complex *a, struct Complex *b);
+void Soustration(FILE *file, struct Complex *a, struct Complex *b);
 
-void Multiplication(struct Complex *a, struct Complex *b);
+void Multiplication(FILE *file, struct Complex *a, struct Complex *b);
 
-void Division(struct Complex *a, struct Complex *b);
+void Division(FILE *file, struct Complex *a, struct Complex *b);
