@@ -12,7 +12,7 @@
 #include "interpolation.h"
 #include "interpole.h"
 #include "interpolation_newton.h"
-
+#include "complex.h"
 
 //#include "quatrieme_interface.h"
 
@@ -136,7 +136,7 @@ static GtkWidget *fenetre_interpolationPoly2 = NULL;
 static GtkWidget *fenetre_interpolationPoly3= NULL;
 static GtkWidget *fenetre_interpolationPoly4 = NULL;
 static GtkWidget *fenetre_polynom = NULL;
-static GtkWidget *fenetre_calculatrice = NULL;
+//static GtkWidget *fenetre_calculatrice = NULL;
 static GtkWidget *fenetre_complex = NULL;
 
 
@@ -721,7 +721,7 @@ G_MODULE_EXPORT void on_Matrice_quit_clicked(){
 	gtk_widget_destroy(fenetre_matrice);
 }
 
-//SYSTEM
+//SYSTEMs
 
 G_MODULE_EXPORT void on_qUIT_clicked(){
 	gtk_widget_destroy(fenetre_system);
@@ -731,12 +731,15 @@ G_MODULE_EXPORT void on_treat2_clicked()
 	GtkEntry *x1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x13"));
 	GtkEntry *x2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x23"));
 	GtkEntry *x3 = GTK_ENTRY(gtk_builder_get_object(data.builder,"x33"));
+
 	GtkEntry *y1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"y13"));
 	GtkEntry *y2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"y23"));
 	GtkEntry *y3 = GTK_ENTRY(gtk_builder_get_object(data.builder,"y33"));
-	GtkEntry *c1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"13c"));
+	
+	GtkEntry *c1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"3c"));
 	GtkEntry *c2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"23c"));
-	GtkEntry *c3 = GTK_ENTRY(gtk_builder_get_object(data.builder,"33c"));
+	GtkEntry *c3 = GTK_ENTRY(gtk_builder_get_object(data.builder,"3c3"));
+	
 	GtkEntry *z1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"z13"));
 	GtkEntry *z2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"z23"));
 	GtkEntry *z3 = GTK_ENTRY(gtk_builder_get_object(data.builder,"z33"));
@@ -765,6 +768,7 @@ G_MODULE_EXPORT void on_treat2_clicked()
 	inco[9] = atof(Y3);
 	inco[10] = atof(Z3);
 	inco[11] = atof(C3);
+
 	//float M[8]={atof(X1),atof(Y1),atof(Z1),atof(C1),atof(X2),atof(Y2),atof(Z2),atof(C2)};
 	FILE *file= fopen("systeme.txt","w");
 	if(file !=NULL)
@@ -826,6 +830,10 @@ G_MODULE_EXPORT void on_treatment_system_clicked()
 G_MODULE_EXPORT void on_out_clicked()
 {
 	gtk_widget_destroy(fenetre_complex);
+}
+G_MODULE_EXPORT void on_egalP_clicked()
+{
+
 }
 int main(int argc, char *argv []){
 	GtkWidget *fenetre_principale = NULL;
