@@ -1,0 +1,29 @@
+1. PREMIERE METHODE :
+
+RAPPEL : 
+ Dans le cas d'une interpolation linéaire, on constitue une courbe d'interpolation qui est une succession de segments. Entre deux points p1 et p2 de coordonnées respectives (x1 , y1) et (x2 , y2),
+ l'interpolation est donnée par la formule suivante
+				y = p * (x - x1) + y1 ,  c'est une formule de Taylor-Young de premier ordre
+avec p la pente donnée par cette formule: 
+				p = (y2 - y1) / (x2 -x1) 
+
+y = -nan * x + 0
+2. SECONDE METHODE : 
+
+RAPPEL :
+ On peut aussi approcher la fonction qui passe par ces points avec une fonction affine qui se calcule ainsi :
+ soit g la fonction affine :  g(x) = ((y1 - y2) / (x1 - x2)) * x + ((x1 * y2) - (x2 * y1)) / (x1 - x2)
+
+Ce qui donne avec nos points : 
+ x : 0 , 0 et f(x) : 0 , 0 
+							g(x) = ((0 - 0) / (0 - 0)) * x + ((0 * 0) - (0 * 0)) / (0 - 0)
+							g(x) = -nanx - -nan 
+
+3. TROISIEME METHODE :
+
+RAPPEL :
+ On peut aussi écrire cette fonction affine en une autre formule que voici :
+									h(x) = ((x2 - x)/(x2 - x1))*y1 + ((x - x1)/(x2 - x1))*y2 
+Ce qui donne pour nos points : 
+									h(x) = ((0 - x)/(0 - 0))*0 + ((x - 0)/(0 - 0))*0
+Ainsi:  	h(x) = -nan(0 - x) + -nan(x - 0)

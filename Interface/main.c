@@ -152,7 +152,7 @@ G_MODULE_EXPORT void on_MainWindow_clicked(){
 G_MODULE_EXPORT void on_polynom_clicked(){
 	fenetre_polynom = GTK_WIDGET(gtk_builder_get_object(data.builder,"polynome"));
  	gtk_widget_show_all (fenetre_polynom);
-	gtk_window_set_title(GTK_WINDOW(fenetre_polynom),"polynome");
+	gtk_window_set_title(GTK_WINDOW(fenetre_polynom),"polynom");
 }
 G_MODULE_EXPORT void on_Interpolation_clicked(){
 			fenetre_interpolation= GTK_WIDGET(gtk_builder_get_object(data.builder,"Interpole"));
