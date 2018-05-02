@@ -14,6 +14,7 @@ float Im(struct Complex *a);
 float Re(struct Complex *a);
 
 void Addition(FILE *file, struct Complex *a, struct Complex *b);
+void Conjuguer(FILE *file,struct Complex *a);
 
 void Soustration(FILE *file, struct Complex *a, struct Complex *b);
 

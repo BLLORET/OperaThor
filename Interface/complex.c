@@ -60,6 +60,26 @@ static struct Complex *conjugue(struct Complex *a) {
   b->img = -a->img;
   return b;
 }
+static float ABS(float a)
+{
+  if(a<0)
+    return -a;
+  else
+    return a;
+}
+void Conjuguer(FILE *file,struct Complex *a)
+{
+  fprintf(file, "Le conjugué d'un nombre complexe est l'inversement de signe de la partie imaginaire du nombre complexe.\n");
+  if(a->img < 0)
+    fprintf(file, "Ainsi pour le nombre complexe %.0f - %.0fi : \n",a->real,ABS(a->img));
+  else
+    fprintf(file, "Ainsi pour le nombre complexe %.0f + %.0fi : \n",a->real,a->img);
+  a->img = -a->img;
+  if(a->img < 0)
+    fprintf(file,"Son conjugué est : %.0f - %.0fi ",a->real,ABS(a->img));
+  else
+    fprintf(file,"Son conjugué est : %.0f + %.0fi ",a->real,a->img);
+}
 
 static struct Complex *div_comp(FILE *file, struct Complex *a, struct Complex *b) {
   fprintf(file, "                ( ");
@@ -277,7 +297,7 @@ void Division(FILE *file, struct Complex *a, struct Complex *b) {
   free(res);
 }
 
-int main(int argc, char const *argv[])
+/*int main(int argc, char const *argv[])
 {
 	
   struct Complex *a = malloc(sizeof(struct Complex));
@@ -291,4 +311,4 @@ int main(int argc, char const *argv[])
   //Multiplication(a, b);
   Division(a, b);
   return 0;
-}
+}*/

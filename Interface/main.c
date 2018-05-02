@@ -99,6 +99,13 @@ static const gchar *Z1 =NULL;
 static const gchar *Z2 =NULL;
 static const gchar *Z3 =NULL;
 
+//COMPLEX
+
+static const gchar *a = NULL;
+static const gchar *b = NULL;
+static const gchar *c = NULL;
+static const gchar *d = NULL;
+
 static const gchar* choice =NULL;
 static int MatriceA[]= {
   0, 0, 0,
@@ -123,10 +130,12 @@ static GtkEntry *Degre =NULL;
 //static gchar *error =NULL;
 static gchar *name_of_file_equation="équation.txt";
 static gchar *name_of_file_system="systeme.txt";
-static gchar *name_of_file="matrice.txt";  
+static gchar *name_of_file="matrice.txt";
+static gchar *name_of_fileC="complex.txt";  
 static gchar *name_of_file_interpolationL ="interpolation_lineaire.txt";
 static gchar *name_of_file_interpolationP ="interpolation_polynomiale.txt";
 static gchar *name_of_file_interpolationN ="interpolation_newton.txt";
+static gchar *name_of_file_interpolationNL ="interpolation_newtonl.txt";
 static GtkWidget *fenetre_matrice = NULL;
 static GtkWidget *fenetre_system= NULL;
 static GtkWidget *fenetre_d = NULL;
@@ -272,6 +281,42 @@ G_MODULE_EXPORT void on_treatment_interpole_clicked()
 		gtk_widget_show_all (fenetre_interpolationLP);
 	    gtk_window_set_title(GTK_WINDOW(fenetre_interpolationLP),"Lagrange_&_Newton_Interpolation");	 
 }
+G_MODULE_EXPORT void on_treatment_newton1_clicked()
+{
+	GtkEntry *X1l = GTK_ENTRY(gtk_builder_get_object(data.builder,"x1cst"));
+	GtkEntry *X2l = GTK_ENTRY(gtk_builder_get_object(data.builder,"x2cst"));
+	GtkEntry *Y1l = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx1cste"));
+	GtkEntry *Y2l = GTK_ENTRY(gtk_builder_get_object(data.builder,"fx2cste"));
+	lineairex1 =gtk_entry_get_text(X1l);
+ 	lineairex2 =gtk_entry_get_text(X2l);
+	lineairey1 =gtk_entry_get_text(Y1l);
+	lineairey2 =gtk_entry_get_text(Y2l);
+	int x[2];
+	int fx[2];
+	x[0] = atoi(lineairex1);
+	x[1] =atoi(lineairex2);
+	fx[0] =atoi(lineairey1);
+	fx[1]=atoi(lineairey2);
+	FILE *file = fopen("interpolation_newtonl.txt","w");
+	if(file !=NULL){
+		interpolation_newton(1,file,x,fx);
+		fclose(file);
+	}
+	fenetre_d = GTK_WIDGET(gtk_builder_get_object(data.builder,"display"));
+	gtk_widget_show_all (fenetre_d);
+	gtk_window_set_title(GTK_WINDOW(fenetre_d),"Résolution interpolation Newton degré 1");
+	gtk_window_set_default_size(GTK_WINDOW(fenetre_d),100,2000);
+	GtkLabel *texte_interpolationnl= GTK_LABEL(
+			gtk_builder_get_object(data.builder, "resolution"));
+	if(NULL == texte_interpolationnl)
+	{
+		fprintf(stderr,"label do not exist");
+	}
+	if(g_file_get_contents(name_of_file_interpolationNL,&contents,NULL,NULL))
+	{
+		gtk_label_set_text(texte_interpolationnl,contents);
+	}
+}
 G_MODULE_EXPORT void on_treatment_interpole_linear_clicked()
 {
 	GtkEntry *X1l = GTK_ENTRY(gtk_builder_get_object(data.builder,"x1cst"));
@@ -297,8 +342,7 @@ G_MODULE_EXPORT void on_treatment_interpole_linear_clicked()
 	gtk_widget_show_all (fenetre_d);
 	gtk_window_set_title(GTK_WINDOW(fenetre_d),"Résolution interpolation linéaire");
 	gtk_window_set_default_size(GTK_WINDOW(fenetre_d),100,2000);
-	GtkLabel *texte_interpolationl= GTK_LABEL(
-			gtk_builder_get_object(data.builder, "resolution"));
+	GtkLabel *texte_interpolationl= GTK_LABEL(gtk_builder_get_object(data.builder, "resolution"));
 	if(NULL == texte_interpolationl)
 	{
 		fprintf(stderr,"label do not exist");
@@ -833,7 +877,162 @@ G_MODULE_EXPORT void on_out_clicked()
 }
 G_MODULE_EXPORT void on_egalP_clicked()
 {
+	FILE *file =fopen("complex.txt","w");
+	GtkEntry *Iplus1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"iplus1"));
+	GtkEntry *Plus1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"plus1"));
+	GtkEntry *Iplus2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"iplus2"));
+	GtkEntry *Plus2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"plus2"));
+	a = gtk_entry_get_text(Iplus1);
+	b= gtk_entry_get_text(Plus1);
+	c =gtk_entry_get_text(Iplus2);
+	d =gtk_entry_get_text(Plus2);
+	struct Complex *A = malloc(sizeof(struct Complex));
+	struct Complex *B = malloc(sizeof(struct Complex));
+	A->real = atof(a);
+	A->img = atof(b);
+	B->real = atof(c);
+	B->img = atof(d);
+	if(file !=NULL)
+	{
+		Addition(file,A,B);
+		fclose(file);
+	}
+	GtkLabel *texte_complex = GTK_LABEL(gtk_builder_get_object(data.builder, "explication"));
+	if(NULL == texte_complex)
+	{
+		fprintf(stderr,"label do not exist");
+	}
+	if(g_file_get_contents(name_of_fileC,&contents,NULL,NULL))
+	{
+		gtk_label_set_text(texte_complex,contents);
+	}
+	//free(A);
+	//free(B);
+}
+G_MODULE_EXPORT void on_egalMult_clicked()
+{
+	FILE *file =fopen("complex.txt","w");
+	GtkEntry *Imult1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"imult1"));
+	GtkEntry *Mult1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"mult1"));
+	GtkEntry *Imult2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"imult2"));
+	GtkEntry *Mult2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"mult2"));
+	a = gtk_entry_get_text(Imult1);
+	b= gtk_entry_get_text(Mult1);
+	c =gtk_entry_get_text(Imult2);
+	d =gtk_entry_get_text(Mult2);
+	struct Complex *A = malloc(sizeof(struct Complex));
+	struct Complex *B = malloc(sizeof(struct Complex));
+	A->real = atof(a);
+	A->img = atof(b);
+	B->real = atof(c);
+	B->img = atof(d);
+	if(file !=NULL)
+	{
+		Multiplication(file,A,B);
+		fclose(file);
+	}
+	GtkLabel *texte_complex = GTK_LABEL(gtk_builder_get_object(data.builder, "explication"));
+	if(NULL == texte_complex)
+	{
+		fprintf(stderr,"label do not exist");
+	}
+	if(g_file_get_contents(name_of_fileC,&contents,NULL,NULL))
+	{
+		gtk_label_set_text(texte_complex,contents);
+	}
+}
+G_MODULE_EXPORT void on_egalD_clicked()
+{
+	FILE *file =fopen("complex.txt","w");
+	GtkEntry *Idiv1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"idiv1"));
+	GtkEntry *Div1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"div1"));
+	GtkEntry *Idiv2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"idiv2"));
+	GtkEntry *Div2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"div2"));
+	a = gtk_entry_get_text(Idiv1);
+	b= gtk_entry_get_text(Div1);
+	c =gtk_entry_get_text(Idiv2);
+	d =gtk_entry_get_text(Div2);
+	struct Complex *A = malloc(sizeof(struct Complex));
+	struct Complex *B = malloc(sizeof(struct Complex));
+	A->real = atof(a);
+	A->img = atof(b);
+	B->real = atof(c);
+	B->img = atof(d);
+	if(file !=NULL)
+	{
+		Division(file,A,B);
+		fclose(file);
+	}
+	GtkLabel *texte_complex = GTK_LABEL(gtk_builder_get_object(data.builder, "explication"));
+	if(NULL == texte_complex)
+	{
+		fprintf(stderr,"label do not exist");
+	}
+	if(g_file_get_contents(name_of_fileC,&contents,NULL,NULL))
+	{
+		gtk_label_set_text(texte_complex,contents);
+	}
+}
+G_MODULE_EXPORT void on_conjugue_clicked()
+{
+		GtkEntry *Iconj = GTK_ENTRY(gtk_builder_get_object(data.builder,"iconj"));
+		GtkEntry *Conj = GTK_ENTRY(gtk_builder_get_object(data.builder,"conj"));
+		struct Complex *C= malloc(sizeof(struct Complex));
+		a = gtk_entry_get_text(Iconj);
+		b = gtk_entry_get_text(Conj);
+		C->real = atof(a);
+		C->img = atof(b);
+		FILE *file=fopen("complex.txt","w");
+		if(file !=NULL)
+		{
+			Conjuguer(file,C);
+			fclose(file);
+		}
+		GtkLabel *texte_complex2 = GTK_LABEL(gtk_builder_get_object(data.builder, "explication"));
+		if(NULL == texte_complex2)
+		{
+			fprintf(stderr,"label do not exist");
+		}
+		if(g_file_get_contents(name_of_fileC,&contents,NULL,NULL))
+		{
+			gtk_label_set_text(texte_complex2,contents);
+		}		
+		//free(C);
+}
 
+G_MODULE_EXPORT void on_egalM_clicked()
+{
+	FILE *file =fopen("complex.txt","w");
+	GtkEntry *Imoins1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"imoins1"));
+	GtkEntry *Moins1 = GTK_ENTRY(gtk_builder_get_object(data.builder,"moins1"));
+	GtkEntry *Imoins2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"imoins2"));
+	GtkEntry *Moins2 = GTK_ENTRY(gtk_builder_get_object(data.builder,"moins2"));
+	a = gtk_entry_get_text(Imoins1);
+	b= gtk_entry_get_text(Moins1);
+	c =gtk_entry_get_text(Imoins2);
+	d =gtk_entry_get_text(Moins2);
+	struct Complex *D = malloc(sizeof(struct Complex));
+	struct Complex *E = malloc(sizeof(struct Complex));
+	D->real = atof(a);
+	D->img = atof(b);
+	E->real = atof(c);
+	E->img = atof(d);
+	if(file !=NULL)
+	{
+		Soustration(file,D,E);
+		fclose(file);
+	}
+	GtkLabel *texte_complex3 = GTK_LABEL(gtk_builder_get_object(data.builder, "explication"));
+	if(NULL == texte_complex3)
+	{
+		fprintf(stderr,"label do not exist");
+	}
+	if(g_file_get_contents(name_of_fileC,&contents,NULL,NULL))
+	{
+		gtk_label_set_text(texte_complex3,contents);
+	}
+	//free(D);
+	//free(E);
 }
 int main(int argc, char *argv []){
 	GtkWidget *fenetre_principale = NULL;

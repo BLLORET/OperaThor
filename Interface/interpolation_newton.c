@@ -3,6 +3,18 @@
 #include "identification.h"
 
 
+struct COEFF
+{
+	float *left;
+	float *right;
+};
+
+void FreeCoeffF(struct COEFF *cf) {
+  free(cf->right);
+  free(cf->left);
+  free(cf);
+}
+
 static void PrintX(FILE* file,int x[],int len)
 {
 	for(int i=0; i<len; i++)
@@ -78,7 +90,7 @@ static void SaveX(FILE* file,int x[],int len)
 	}
 	fprintf(file,"\n");
 }
-static int differences_divisees(FILE* file,int x1,int x2,int fx1,int fx2)
+static float differences_divisees(FILE* file,int x1,int x2,int fx1,int fx2)
 {
 	fprintf(file,"				Ce qui donne: \n");
 	if(fx1 <0 && x1 <0)
@@ -89,8 +101,8 @@ static int differences_divisees(FILE* file,int x1,int x2,int fx1,int fx2)
 		fprintf(file," 						        %d + %d / %d - %d",fx2,abs(fx1),x2,x1);
 	else
 		fprintf(file," 						        %d - %d / %d - %d",fx2,fx1,x2,x1);
-	int res = (fx2 - fx1)/(x2-x1);
-	fprintf(file," = %d",res);
+	float res = ((float)fx2 - (float)fx1)/((float)x2-(float)x1);
+	fprintf(file," = %.2f",res);
 	fprintf(file,"\n\n");
 	return res;
 }
@@ -114,10 +126,10 @@ static int COUNTx(char* tab)
 }
 	return count;
 }
-static int* MULTIPLIER(int size,int mult,int* tab,int* final)
+static float* MULTIPLIER(int size,float mult,int* tab,float* final)
 {
 	for(int i= 0; i< size; i++){
-		int nb = tab[i];
+		float nb = (float)tab[i];
 		if(nb == 0)
 			final[i]=0;
 		else
@@ -148,14 +160,14 @@ static int* RecupNumber(char *equation,/*float res,*/int* recup)
 	}
 	return recup;
 }
-static void Printpositivity(FILE* file,int n) {
+static void Printpositivity(FILE* file,float n) {
   if (n < 0)
-    fprintf(file," - %d", - n);
+    fprintf(file," - %.2f", - n);
   else
-    fprintf(file," + %d", n);
+    fprintf(file," + %.2f", n);
 }
 
-static void printdegree(FILE* file,int n){
+static void printdegree(FILE* file,float n){
   if (n == 4)
     fprintf(file,"X⁴");
   else if (n == 3)
@@ -165,14 +177,20 @@ static void printdegree(FILE* file,int n){
   else if (n == 1)
     fprintf(file,"X");
 }
-static void printCoeff(FILE* file,struct coeff *cf) {
-  int degreel = FindDegree(cf->left);
+int FindDegreeF(float *tab) {
+  int degree = 4;
+  while(tab[degree] == 0 && degree > 0)
+    degree--;
+  return degree;
+}
+static void printCoeff(FILE* file,struct COEFF *cf) {
+  int degreel = FindDegreeF(cf->left);
   //int degreer = FindDegree(cf->right);
   // Left part
   //if (degreel == 0 )&& cf->left[0] == 0)
     //fprintf(file,"          0 = ");
   //else {
-    fprintf(file,"%d", cf->left[degreel]);
+    fprintf(file,"%.2f", cf->left[degreel]);
     printdegree(file,degreel);
     degreel--;
     while (degreel >= 0) {
@@ -184,43 +202,50 @@ static void printCoeff(FILE* file,struct coeff *cf) {
     }
   //}
 }
+float ABS(float a)
+{
+	if(a<0)
+		return -a;
+	else
+		return a;
+}
 /*static void PRINT_PART(int *tab,int size, int num)
 {
 	for(int i=0; i<size;i++)
 			fprintf(stdout,"PART : %d: %d,\n",num,tab[i]);
 	fprintf(stdout,"\n");
 }*/
-static void REMPLISTRUCT(int size,struct coeff *cf,int* tab)
+static void REMPLISTRUCT(int size,struct COEFF *cf,float* tab)
 {
 	for(int i=0;i<size;i++)
 		cf->left[i] = tab[i];
 }
-static void Poly_newton3(FILE* Fichier,int x[], int diff[])
+static void Poly_newton3(FILE* Fichier,int x[], float diff[])
 {
-	struct coeff* cf= malloc(sizeof(struct coeff));
+	struct COEFF* cf= malloc(sizeof(struct COEFF));
 	cf->left = calloc(5,sizeof(float));
 	cf->right = calloc(5,sizeof(float));
-	struct coeff* PARTIE1= malloc(sizeof(struct coeff));
-	PARTIE1->left = calloc(5,sizeof(int));
-	PARTIE1->right = calloc(5,sizeof(int));
-	struct coeff* PARTIE2= malloc(sizeof(struct coeff));
-	PARTIE2->left = calloc(5,sizeof(int));
-	PARTIE2->right = calloc(5,sizeof(int));
-	struct coeff* PARTIE3= malloc(sizeof(struct coeff));
-	PARTIE3->left = calloc(5,sizeof(int));
-	PARTIE3->right = calloc(5,sizeof(int));
+	struct COEFF* PARTIE1= malloc(sizeof(struct COEFF));
+	PARTIE1->left = calloc(5,sizeof(float));
+	PARTIE1->right = calloc(5,sizeof(float));
+	struct COEFF* PARTIE2= malloc(sizeof(struct COEFF));
+	PARTIE2->left = calloc(5,sizeof(float));
+	PARTIE2->right = calloc(5,sizeof(float));
+	struct COEFF* PARTIE3= malloc(sizeof(struct COEFF));
+	PARTIE3->left = calloc(5,sizeof(float));
+	PARTIE3->right = calloc(5,sizeof(float));
 	
 	fprintf(Fichier,"2. Ici on est en degré 3 donc \n\n 	        P3(x) = f(x0) + f[x0,x1](x - x0) + f[x0,x1,x2](x - x0)(x - x1) + f[x0,x1,x2,x3](x - x0)(x - x1)(x - x2)\n\n");
 	fprintf(Fichier,"Ce qui donne : \n\n");
 	if(diff[0]!= 0)
-		fprintf(Fichier,"	P3(x) = %d ",diff[0]);
+		fprintf(Fichier,"	P3(x) = %.2f ",diff[0]);
 	else 
 		fprintf(Fichier,"	P3(x) = ");	
 	for(int i=1; i < 4;i++){
 			if(diff[i] > 0)
-				fprintf(Fichier,"+ %d * ",abs(diff[i]));
+				fprintf(Fichier,"+ %.2f * ",ABS(diff[i]));
 			else if(diff[i] < 0)
-				fprintf(Fichier," - %d * ",abs(diff[i]));
+				fprintf(Fichier," - %.2f * ",ABS(diff[i]));
 			else
 				fprintf(Fichier," ");
 		PrintX(Fichier,x,i);
@@ -252,7 +277,7 @@ static void Poly_newton3(FILE* Fichier,int x[], int diff[])
     	int NUMBER[j];
 		RecupNumber(equation,NUMBER);
 		REMPLIR(0,1,0,NUMBER,p1);
-		int res1[2];
+		float res1[2];
 		MULTIPLIER(2,diff[1],p1,res1);
 		REMPLISTRUCT(2,PARTIE1,res1);
 	}
@@ -268,7 +293,7 @@ static void Poly_newton3(FILE* Fichier,int x[], int diff[])
 		REMPLIR(0,1,0,NUMBER,p1);
 		REMPLIR(0,3,2,NUMBER,p2);
 		dev2(p1,p2,second_degre);
-		int res2[3];
+		float res2[3];
 		MULTIPLIER(3,diff[2],second_degre,res2);
 		REMPLISTRUCT(3,PARTIE2,res2);
 	}
@@ -285,7 +310,7 @@ static void Poly_newton3(FILE* Fichier,int x[], int diff[])
 		REMPLIR(0,5,4,NUMBER,p3);
 		dev2(p1,p2,second_degre);
 		dev3(second_degre,p3,troisieme_degre);
-		int res3[4];
+		float res3[4];
 		MULTIPLIER(4,diff[3],troisieme_degre,res3);
 		REMPLISTRUCT(4,PARTIE3,res3);
 	}
@@ -293,9 +318,9 @@ static void Poly_newton3(FILE* Fichier,int x[], int diff[])
 	fprintf(Fichier,"Ainsi : \n\n");
 	if(diff[0]!= 0){
 		if(diff[0] < 0)
-			fprintf(Fichier,"	P3(x) = %d - ",abs(diff[0]));
+			fprintf(Fichier,"	P3(x) = %.2f - ",ABS(diff[0]));
 		else
-			fprintf(Fichier,"	P3(x) = %d + ",diff[0]);}
+			fprintf(Fichier,"	P3(x) = %.2f + ",diff[0]);}
 	else 
 		fprintf(Fichier,"	P3(x) = ");	
 	printCoeff(Fichier,PARTIE1);
@@ -314,34 +339,34 @@ static void Poly_newton3(FILE* Fichier,int x[], int diff[])
 	fprintf(Fichier,"	P3(x) = ");	
 	printCoeff(Fichier,cf);
 	fprintf(Fichier,"\n");
-	FreeCoeff(cf);
-	FreeCoeff(PARTIE1);
-	FreeCoeff(PARTIE2);
-	FreeCoeff(PARTIE3);
+	FreeCoeffF(cf);
+	FreeCoeffF(PARTIE1);
+	FreeCoeffF(PARTIE2);
+	FreeCoeffF(PARTIE3);
 }
-static void Poly_newton2(FILE* Fichier,int x[], int diff[])
+static void Poly_newton2(FILE* Fichier,int x[], float diff[])
 {
-	struct coeff* cf= malloc(sizeof(struct coeff));
+	struct COEFF* cf= malloc(sizeof(struct COEFF));
 	cf->left = calloc(5,sizeof(float));
 	cf->right = calloc(5,sizeof(float));
-	struct coeff* PARTIE1= malloc(sizeof(struct coeff));
-	PARTIE1->left = calloc(5,sizeof(int));
-	PARTIE1->right = calloc(5,sizeof(int));
-	struct coeff* PARTIE2= malloc(sizeof(struct coeff));
-	PARTIE2->left = calloc(5,sizeof(int));
-	PARTIE2->right = calloc(5,sizeof(int));
+	struct COEFF* PARTIE1= malloc(sizeof(struct COEFF));
+	PARTIE1->left = calloc(5,sizeof(float));
+	PARTIE1->right = calloc(5,sizeof(float));
+	struct COEFF* PARTIE2= malloc(sizeof(struct COEFF));
+	PARTIE2->left = calloc(5,sizeof(float));
+	PARTIE2->right = calloc(5,sizeof(float));
 
 	fprintf(Fichier,"2. Ici on est en degré 2 donc \n\n 	        P3(x) = f(x0) + f[x0,x1](x - x0) + f[x0,x1,x2](x - x0)(x - x1)\n\n");
 	fprintf(Fichier,"Ce qui donne : \n\n");
 	if(diff[0]!= 0)
-		fprintf(Fichier,"	P2(x) = %d ",diff[0]);
+		fprintf(Fichier,"	P2(x) = %.2f ",diff[0]);
 	else 
 		fprintf(Fichier,"	P2(x) = ");	
 	for(int i=1; i < 3;i++){
 			if(diff[i] > 0)
-				fprintf(Fichier,"+ %d * ",abs(diff[i]));
+				fprintf(Fichier,"+ %.2f * ",ABS(diff[i]));
 			else if(diff[i] < 0)
-				fprintf(Fichier," - %d * ",abs(diff[i]));
+				fprintf(Fichier," - %.2f * ",ABS(diff[i]));
 			else
 				fprintf(Fichier," ");
 		PrintX(Fichier,x,i);
@@ -371,7 +396,7 @@ static void Poly_newton2(FILE* Fichier,int x[], int diff[])
     	int NUMBER[j];
 		RecupNumber(equation,NUMBER);
 		REMPLIR(0,1,0,NUMBER,p1);
-		int res1[2];
+		float res1[2];
 		MULTIPLIER(2,diff[1],p1,res1);
 		REMPLISTRUCT(2,PARTIE1,res1);
 	}
@@ -387,16 +412,16 @@ static void Poly_newton2(FILE* Fichier,int x[], int diff[])
 		REMPLIR(0,1,0,NUMBER,p1);
 		REMPLIR(0,3,2,NUMBER,p2);
 		dev2(p1,p2,second_degre);
-		int res2[3];
+		float res2[3];
 		MULTIPLIER(3,diff[2],second_degre,res2);
 		REMPLISTRUCT(3,PARTIE2,res2);
 	}
 	fprintf(Fichier,"Ainsi : \n\n");
 	if(diff[0]!= 0){
 		if(diff[0] < 0)
-			fprintf(Fichier,"	P2(x) = %d - ",abs(diff[0]));
+			fprintf(Fichier,"	P2(x) = %.2f - ",ABS(diff[0]));
 		else
-			fprintf(Fichier,"	P2(x) = %d + ",diff[0]);}
+			fprintf(Fichier,"	P2(x) = %.2f + ",diff[0]);}
 	else 
 		fprintf(Fichier,"	P2(x) = ");	
 	printCoeff(Fichier,PARTIE1);
@@ -411,38 +436,105 @@ static void Poly_newton2(FILE* Fichier,int x[], int diff[])
 	fprintf(Fichier,"	P2(x) = ");	
 	printCoeff(Fichier,cf);
 	fprintf(Fichier,"\n");
-	FreeCoeff(cf);
-	FreeCoeff(PARTIE1);
-	FreeCoeff(PARTIE2);
+	FreeCoeffF(cf);
+	FreeCoeffF(PARTIE1);
+	FreeCoeffF(PARTIE2);
 }
-static void Poly_newton4(FILE* Fichier,int x[], int diff[])
+void Poly_newton(FILE* Fichier,int x[], float diff[])
 {
-	struct coeff* cf= malloc(sizeof(struct coeff));
+	struct COEFF* cf= malloc(sizeof(struct COEFF));
 	cf->left = calloc(5,sizeof(float));
 	cf->right = calloc(5,sizeof(float));
-	struct coeff* PARTIE1= malloc(sizeof(struct coeff));
-	PARTIE1->left = calloc(5,sizeof(int));
-	PARTIE1->right = calloc(5,sizeof(int));
-	struct coeff* PARTIE2= malloc(sizeof(struct coeff));
-	PARTIE2->left = calloc(5,sizeof(int));
-	PARTIE2->right = calloc(5,sizeof(int));
-	struct coeff* PARTIE3= malloc(sizeof(struct coeff));
-	PARTIE3->left = calloc(5,sizeof(int));
-	PARTIE3->right = calloc(5,sizeof(int));
-	struct coeff* PARTIE4= malloc(sizeof(struct coeff));
-	PARTIE4->left = calloc(5,sizeof(int));
-	PARTIE4->right = calloc(5,sizeof(int));
+
+	fprintf(Fichier,"2. Ici on est en degré 2 donc \n\n 	        P1(x) = f(x0) + f[x0,x1](x - x0)\n\n");
+	fprintf(Fichier,"Ce qui donne : \n\n");
+	if(diff[0]!= 0)
+		fprintf(Fichier,"	P1(x) = %.2f ",diff[0]);
+	else 
+		fprintf(Fichier,"	P1(x) = ");	
+	//for(int i=1; i < 2;i++){
+			if(diff[1] > 0)
+				fprintf(Fichier,"+ %.2f * ",ABS(diff[1]));
+			else if(diff[1] < 0)
+				fprintf(Fichier," - %.2f * ",ABS(diff[1]));
+			else
+				fprintf(Fichier," ");
+		PrintX(Fichier,x,1);
+	//}
+	fprintf(Fichier,"\n");
+	//int rec[15];
+	//int index=0;
+	char equation[20];
+	//FILE *ok = NULL;
+	FILE *ok=fopen("test.txt","w");
+	if(ok !=NULL){
+		//for(int j=1; j<3; j++)
+			SaveX(ok,x,1);
+		
+	}
+	fclose(ok);
+	int p1[2];
+	//int p2[2];
+	int j=0;
+	//int second_degre[3];
+	ok = fopen("test.txt","r");
+	if(fgets(equation,20,ok)!=NULL)
+	{
+		//printf("%s\n",equation);
+		j =CountNumber(equation)+COUNTx(equation);
+		//RECUP LES NOMBRES DE L'EQUATION
+    	int NUMBER[j];
+		RecupNumber(equation,NUMBER);
+		REMPLIR(0,1,0,NUMBER,p1);
+		float res1[2];
+		MULTIPLIER(2,diff[1],p1,res1);
+		REMPLISTRUCT(2,cf,res1);
+	}
+	fprintf(Fichier,"Ainsi : \n\n");
+	if(diff[0]!= 0){
+		if(diff[0] < 0)
+			fprintf(Fichier,"	P1(x) = %.2f - ",ABS(diff[0]));
+		else
+			fprintf(Fichier,"	P1(x) = %.2f + ",diff[0]);}
+	else 
+		fprintf(Fichier,"	P1(x) = ");	
+	printCoeff(Fichier,cf);
+	fprintf(Fichier,"\n\n");
+	cf->left[0]+= diff[0];
+	fprintf(Fichier,"On rassemble tout et on obtient : \n\n");
+	fprintf(Fichier,"	P1(x) = ");	
+	printCoeff(Fichier,cf);
+	fprintf(Fichier,"\n");
+	FreeCoeffF(cf);
+}
+static void Poly_newton4(FILE* Fichier,int x[], float diff[])
+{
+	struct COEFF* cf= malloc(sizeof(struct COEFF));
+	cf->left = calloc(5,sizeof(float));
+	cf->right = calloc(5,sizeof(float));
+	struct COEFF* PARTIE1= malloc(sizeof(struct COEFF));
+	PARTIE1->left = calloc(5,sizeof(float));
+	PARTIE1->right = calloc(5,sizeof(float));
+	struct COEFF* PARTIE2= malloc(sizeof(struct COEFF));
+	PARTIE2->left = calloc(5,sizeof(float));
+	PARTIE2->right = calloc(5,sizeof(float));
+	struct COEFF* PARTIE3= malloc(sizeof(struct COEFF));
+	PARTIE3->left = calloc(5,sizeof(float));
+	PARTIE3->right = calloc(5,sizeof(float));
+	struct COEFF* PARTIE4= malloc(sizeof(struct COEFF));
+	PARTIE4->left = calloc(5,sizeof(float));
+	PARTIE4->right = calloc(5,sizeof(float));
 	fprintf(Fichier,"2. Ici on est en degré 4 donc \n\n 	        P3(x) = f(x0) + f[x0,x1](x - x0) + f[x0,x1,x2](x - x0)(x - x1) + f[x0,x1,x2,x3](x - x0)(x - x1)(x - x2) + f[x0,x1,x2,x3,x4](x - x0)(x -x1)(x - x2)(x - x3)\n\n");
 	fprintf(Fichier,"Ce qui donne : \n\n");
 	if(diff[0]!= 0)
-		fprintf(Fichier,"	P4(x) = %d ",diff[0]);
+		fprintf(Fichier,"	P4(x) = %.2f ",diff[0]);
 	else 
 		fprintf(Fichier,"	P4(x) = ");	
 	for(int i=1; i < 5;i++){
 			if(diff[i] > 0)
-				fprintf(Fichier,"+ %d * ",abs(diff[i]));
+				fprintf(Fichier,"+ %.2f * ",ABS(diff[i]));
 			else if(diff[i] < 0)
-				fprintf(Fichier," - %d * ",abs(diff[i]));
+				fprintf(Fichier," - %.2f * ",ABS(diff[i]));
 			else
 				fprintf(Fichier," ");
 		PrintX(Fichier,x,i);
@@ -476,7 +568,7 @@ static void Poly_newton4(FILE* Fichier,int x[], int diff[])
     	int NUMBER[j];
 		RecupNumber(equation,NUMBER);
 		REMPLIR(0,1,0,NUMBER,p1);
-		int res1[2];
+		float res1[2];
 		MULTIPLIER(2,diff[1],p1,res1);
 		REMPLISTRUCT(2,PARTIE1,res1);
 	}
@@ -492,7 +584,7 @@ static void Poly_newton4(FILE* Fichier,int x[], int diff[])
 		REMPLIR(0,1,0,NUMBER,p1);
 		REMPLIR(0,3,2,NUMBER,p2);
 		dev2(p1,p2,second_degre);
-		int res2[3];
+		float res2[3];
 		MULTIPLIER(3,diff[2],second_degre,res2);
 		REMPLISTRUCT(3,PARTIE2,res2);
 	}
@@ -509,7 +601,7 @@ static void Poly_newton4(FILE* Fichier,int x[], int diff[])
 		REMPLIR(0,5,4,NUMBER,p3);
 		dev2(p1,p2,second_degre);
 		dev3(second_degre,p3,troisieme_degre);
-		int res3[4];
+		float res3[4];
 		MULTIPLIER(4,diff[3],troisieme_degre,res3);
 		REMPLISTRUCT(4,PARTIE3,res3);
 	}
@@ -535,7 +627,7 @@ static void Poly_newton4(FILE* Fichier,int x[], int diff[])
 		
 		dev4(troisieme_degre,p4,quatrieme_degre);
 		
-		int res4[5];
+		float res4[5];
 		MULTIPLIER(5,diff[4],quatrieme_degre,res4);
 		
 		REMPLISTRUCT(5,PARTIE4,res4);
@@ -544,9 +636,9 @@ static void Poly_newton4(FILE* Fichier,int x[], int diff[])
 	fprintf(Fichier,"Ainsi : \n\n");
 	if(diff[0]!= 0){
 		if(diff[0] < 0)
-			fprintf(Fichier,"	P4(x) = %d - ",abs(diff[0]));
+			fprintf(Fichier,"	P4(x) = %.2f - ",ABS(diff[0]));
 		else
-			fprintf(Fichier,"	P4(x) = %d + ",diff[0]);}
+			fprintf(Fichier,"	P4(x) = %.2f + ",diff[0]);}
 	else 
 		fprintf(Fichier,"	P4(x) = ");	
 	printCoeff(Fichier,PARTIE1);
@@ -569,11 +661,11 @@ static void Poly_newton4(FILE* Fichier,int x[], int diff[])
 	fprintf(Fichier,"	P4(x) = ");	
 	printCoeff(Fichier,cf);
 	fprintf(Fichier,"\n");
-	FreeCoeff(cf);
-	FreeCoeff(PARTIE1);
-	FreeCoeff(PARTIE2);
-	FreeCoeff(PARTIE3);
-	FreeCoeff(PARTIE4);
+	FreeCoeffF(cf);
+	FreeCoeffF(PARTIE1);
+	FreeCoeffF(PARTIE2);
+	FreeCoeffF(PARTIE3);
+	FreeCoeffF(PARTIE4);
 }
 void interpolation_newton(int degre,FILE* file,int x[], int fx[])
 {
@@ -584,11 +676,13 @@ void interpolation_newton(int degre,FILE* file,int x[], int fx[])
 	fprintf(file,"où pour tout k >=1 : \n");
 	fprintf(file,"					f[x0,_,xk] = f[x1,_xk]-f[x0,_,x(k-1)] / xk -x0 et où f[xk] =f(xk)\n\n");
 	fprintf(file,"1. Procédons d'abords par la construction du tableau des differences divisées aussi appelé arbre de Newton\n");
-	int diff[4];
-	int diff2[5];
-	int fx0 = fx[0];
+	float diff[4];
+	float diff2[5];
+	float fx0 = (float)fx[0];
 	diff[0] =fx0;
 	diff2[0]=fx0;
+	float diff3[2];
+	diff[0]= fx0;
 	int size =degre +1;
 	fprintf(file,"Tout d'abord les abcisses et les ordonnées données : \n\n");
 	for(int i=0; i<size;i++)
@@ -607,72 +701,78 @@ void interpolation_newton(int degre,FILE* file,int x[], int fx[])
 	{
 
 		fprintf(file,"							f[x2,x3] = f(x3)-f(x2) / x3-x2\n");
-		int fx2x3 = differences_divisees(file,x[2],x[3],fx[2],fx[3]);
+		float fx2x3 = differences_divisees(file,x[2],x[3],fx[2],fx[3]);
 		fprintf(file,"							f[x1,x2] = f(x2)-f(x1) / x2-x1\n");
-		int fx1x2 = differences_divisees(file,x[1],x[2],fx[1],fx[2]);
+		float fx1x2 = differences_divisees(file,x[1],x[2],fx[1],fx[2]);
 		fprintf(file,"							f[x0,x1] = f(x1)-f(x0) / x1-x0\n");
 		int fx0x1 = differences_divisees(file,x[0],x[1],fx[0],fx[1]);
 		diff[1]=fx0x1;
 		fprintf(file,"							f[x1,x2,x3] = f[x2,x3]-f[x1,x2] / x3-x1\n");
-		int fx1x2x3 = differences_divisees(file,x[1],x[3],fx1x2,fx2x3);
+		float fx1x2x3 = differences_divisees(file,x[1],x[3],fx1x2,fx2x3);
 		fprintf(file,"							f[x0,x1,x2] = f[x1,x2]-f[x0,x1] / x2-x0\n");
-		int fx0x1x2 = differences_divisees(file,x[0],x[2],fx0x1,fx1x2);
+		float fx0x1x2 = differences_divisees(file,x[0],x[2],fx0x1,fx1x2);
 		diff[2]=fx0x1x2;
 		fprintf(file,"							f[x0,x1,x2,x3] = f[x1,x2,x3]-f[x0,x1,x2] / x3-x0\n");
-		int fx0x1x2x3= differences_divisees(file,x[0],x[3],fx0x1x2,fx1x2x3);
+		float fx0x1x2x3= differences_divisees(file,x[0],x[3],fx0x1x2,fx1x2x3);
 		diff[3]= fx0x1x2x3;
 		Poly_newton3(file,x,diff);
 	}
 	else if(degre ==2)
 	{
 		fprintf(file,"							f[x1,x2] = f(x2)-f(x1) / x2-x1\n");
-		int fx1x2 = differences_divisees(file,x[1],x[2],fx[1],fx[2]);
+		float fx1x2 = differences_divisees(file,x[1],x[2],fx[1],fx[2]);
 		fprintf(file,"							f[x0,x1] = f(x1)-f(x0) / x1-x0\n");
-		int fx0x1 = differences_divisees(file,x[0],x[1],fx[0],fx[1]);
+		float fx0x1 = differences_divisees(file,x[0],x[1],fx[0],fx[1]);
 		diff[1]=fx0x1;
 		fprintf(file,"							f[x0,x1,x2] = f[x1,x2]-f[x0,x1] / x2-x0\n");
-		int fx0x1x2 = differences_divisees(file,x[0],x[2],fx0x1,fx1x2);
+		float fx0x1x2 = differences_divisees(file,x[0],x[2],fx0x1,fx1x2);
 		diff[2]=fx0x1x2;
 		Poly_newton2(file,x,diff);
 	}
 	else if(degre == 4)
 	{
 		fprintf(file,"							f[x3,x4] = f(x4)-f(x3) / x4-x3\n");
-		int fx3x4 = differences_divisees(file,x[3],x[4],fx[3],fx[4]);
+		float fx3x4 = differences_divisees(file,x[3],x[4],fx[3],fx[4]);
 
 		fprintf(file,"							f[x2,x3] = f(x3)-f(x2) / x3-x2\n");
-		int fx2x3 = differences_divisees(file,x[2],x[3],fx[2],fx[3]);
+		float fx2x3 = differences_divisees(file,x[2],x[3],fx[2],fx[3]);
 
 		fprintf(file,"							f[x1,x2] = f(x2)-f(x1) / x2-x1\n");
-		int fx1x2 = differences_divisees(file,x[1],x[2],fx[1],fx[2]);
+		float fx1x2 = differences_divisees(file,x[1],x[2],fx[1],fx[2]);
 
 		fprintf(file,"							f[x0,x1] = f(x1)-f(x0) / x1-x0\n");
-		int fx0x1 = differences_divisees(file,x[0],x[1],fx[0],fx[1]);
+		float fx0x1 = differences_divisees(file,x[0],x[1],fx[0],fx[1]);
 		diff2[1]=fx0x1;
 
 		fprintf(file,"							f[x2,x3,x4] = f[x3,x4]-f[x2,x3] / x4-x2\n");
-		int fx2x3x4 = differences_divisees(file,x[2],x[4],fx2x3,fx3x4);
+		float fx2x3x4 = differences_divisees(file,x[2],x[4],fx2x3,fx3x4);
 
 		fprintf(file,"							f[x1,x2,x3] = f[x2,x3]-f[x1,x2] / x3-x1\n");
-		int fx1x2x3 = differences_divisees(file,x[1],x[3],fx1x2,fx2x3);
+		float fx1x2x3 = differences_divisees(file,x[1],x[3],fx1x2,fx2x3);
 
 		fprintf(file,"							f[x0,x1,x2] = f[x1,x2]-f[x0,x1] / x2-x0\n");
-		int fx0x1x2 = differences_divisees(file,x[0],x[2],fx0x1,fx1x2);
+		float fx0x1x2 = differences_divisees(file,x[0],x[2],fx0x1,fx1x2);
 		diff2[2]=fx0x1x2;
 
 		fprintf(file,"							f[x1,x2,x3,x4] = f[x2,x3,x4]-f[x1,x2,x3] / x4-x1\n");
-		int fx1x2x3x4= differences_divisees(file,x[1],x[4],fx1x2x3,fx2x3x4);
+		float fx1x2x3x4= differences_divisees(file,x[1],x[4],fx1x2x3,fx2x3x4);
 
 		fprintf(file,"							f[x0,x1,x2,x3] = f[x1,x2,x3]-f[x0,x1,x2] / x3-x0\n");
-		int fx0x1x2x3= differences_divisees(file,x[0],x[3],fx0x1x2,fx1x2x3);
+		float fx0x1x2x3= differences_divisees(file,x[0],x[3],fx0x1x2,fx1x2x3);
 		diff2[3]= fx0x1x2x3;
 
 		fprintf(file,"							f[x0,x1,x2,x3,x4] = f[x1,x2,x3,x4]-f[x0,x1,x2,x3] / x4-x0\n");
-		int fx0x1x2x3x4= differences_divisees(file,x[0],x[4],fx0x1x2x3,fx1x2x3x4);
+		float fx0x1x2x3x4= differences_divisees(file,x[0],x[4],fx0x1x2x3,fx1x2x3x4);
 		diff2[4] = fx0x1x2x3x4;
 		Poly_newton4(file,x,diff2);
 	}
-
+	else if(degre ==1)
+	{
+		fprintf(file,"							f[x0,x1] = f(x1)-f(x0) / x1-x0\n");
+		float fx0x1 = differences_divisees(file,x[0],x[1],fx[0],fx[1]);
+		diff3[1]=fx0x1;
+		Poly_newton(file,x,diff3);
+	}
 }
 /*void main(void)
 {
