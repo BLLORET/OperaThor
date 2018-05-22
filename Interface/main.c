@@ -131,7 +131,7 @@ static GtkEntry *Degre =NULL;
 static gchar *name_of_file_equation="équation.txt";
 static gchar *name_of_file_system="systeme.txt";
 static gchar *name_of_file="matrice.txt";
-static gchar *name_of_fileC="complex.txt";  
+static gchar *name_of_fileC="complex.txt"; 
 static gchar *name_of_file_interpolationL ="interpolation_lineaire.txt";
 static gchar *name_of_file_interpolationP ="interpolation_polynomiale.txt";
 static gchar *name_of_file_interpolationN ="interpolation_newton.txt";
@@ -145,6 +145,7 @@ static GtkWidget *fenetre_interpolationPoly2 = NULL;
 static GtkWidget *fenetre_interpolationPoly3= NULL;
 static GtkWidget *fenetre_interpolationPoly4 = NULL;
 static GtkWidget *fenetre_polynom = NULL;
+static GtkWidget *fenetre_calculatrice= NULL;
 //static GtkWidget *fenetre_calculatrice = NULL;
 static GtkWidget *fenetre_complex = NULL;
 
@@ -188,6 +189,12 @@ G_MODULE_EXPORT void on_complex_clicked()
 	fenetre_complex = GTK_WIDGET(gtk_builder_get_object(data.builder,"Complex"));
 			 gtk_widget_show_all (fenetre_complex);
 			 gtk_window_set_title(GTK_WINDOW(fenetre_complex),"Complex");
+}
+G_MODULE_EXPORT void on_Calculatrice_clicked()
+{
+	fenetre_calculatrice = GTK_WIDGET(gtk_builder_get_object(data.builder,"Calculette"));
+			 gtk_widget_show_all (fenetre_calculatrice);
+			 gtk_window_set_title(GTK_WINDOW(fenetre_complex),"Calculator");
 }
 
 //EQUATION
@@ -1034,6 +1041,14 @@ G_MODULE_EXPORT void on_egalM_clicked()
 	//free(D);
 	//free(E);
 }
+
+
+// Calculette
+G_MODULE_EXPORT void on_end_clicked()
+{
+	gtk_widget_destroy(fenetre_calculatrice);
+}
+
 int main(int argc, char *argv []){
 	GtkWidget *fenetre_principale = NULL;
 	GError *error = NULL;
